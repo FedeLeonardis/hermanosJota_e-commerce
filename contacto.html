@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Hermanos Jota</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="contacto.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Contacto</h1>
+        <p class="subtitle">Nuestros clientes suelen tener preguntas. Necesitamos un formulario simple para que nos dejen sus dudas.</p>
+        
+        <div class="form-container" id="formContainer">
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre *</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required>
+                    <div class="error" id="nombreError">Por favor, ingresa tu nombre</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+                    <div class="error" id="emailError">Por favor, ingresa un email válido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="mensaje">Mensaje *</label>
+                    <textarea id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                    <div class="error" id="mensajeError">Por favor, ingresa tu mensaje</div>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">
+                    <span>Enviar Mensaje</span>
+                    <div class="loading"></div>
+                </button>
+            </form>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <div class="success-icon">✓</div>
+            <h3>¡Mensaje Enviado!</h3>
+            <p>Gracias por contactarnos. Nos pondremos en contacto contigo pronto.</p>
+        </div>
+    </div>
+
+    <script>
+        class ContactForm {
+            constructor() {
+                this.form = document.getElementById('contactForm');
+                this.formContainer = document.getElementById('formContainer');
+                this.successMessage = document.getElementById('successMessage');
+                this.submitBtn = document.getElementById('submitBtn');
+                
+                this.fields = {
+                    nombre: {
+                        input: document.getElementById('nombre'),
+                        error: document.getElementById('nombreError'),
+                        validate: (value) => value.trim().length >= 2
+                    },
+                    email: {
+                        input: document.getElementById('email'),
+                        error: document.getElementById('emailError'),
+                        validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                    },
+                    mensaje: {
+                        input: document.getElementById('mensaje'),
+                        error: document.getElementById('mensajeError'),
+                        validate: (value) => value.trim().length >= 10
+                    }
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                this.setupFieldValidation();
+            }
+
+            setupFieldValidation() {
+                Object.keys(this.fields).forEach(fieldName => {
+                    const field = this.fields[fieldName];
+                    field.input.addEventListener('blur', () => this.validateField(fieldName));
+                    field.input.addEventListener('input', () => this.clearFieldError(fieldName));
+                });
+            }
+
+            validateField(fieldName) {
+                const field = this.fields[fieldName];
+                const value = field.input.value;
+                const isValid = field.validate(value);
+
+                if (!isValid) {
+                    this.showFieldError(fieldName);
+                    return false;
+                } else {
+                    this.clearFieldError(fieldName);
+                    return true;
+                }
+            }
+
+            showFieldError(fieldName) {
+                const field = this.fields[fieldName];
+                field.input.classList.add('input-error');
+                field.error.classList.add('show');
+            }
+
+            clearFieldError(fieldName) {
+                const field = this.fields[fieldName];
+                field.input.classList.remove('input-error');
+                field.error.classList.remove('show');
+            }
+
+            validateAllFields() {
+                let isValid = true;
+                Object.keys(this.fields).forEach(fieldName => {
+                    if (!this.validateField(fieldName)) {
+                        isValid = false;
+                    }
+                });
+                return isValid;
+            }
+
+            async handleSubmit(e) {
+                e.preventDefault();
+
+                if (!this.validateAllFields()) {
+                    return;
+                }
+
+                this.setLoading(true);
+
+                // Simular envío del formulario
+                try {
+                    await this.simulateSubmission();
+                    this.showSuccess();
+                } catch (error) {
+                    console.error('Error al enviar:', error);
+                    this.setLoading(false);
+                }
+            }
+
+            async simulateSubmission() {
+                // Simular delay de red
+                return new Promise(resolve => setTimeout(resolve, 1500));
+            }
+
+            setLoading(loading) {
+                if (loading) {
+                    this.submitBtn.classList.add('loading');
+                    this.submitBtn.disabled = true;
+                } else {
+                    this.submitBtn.classList.remove('loading');
+                    this.submitBtn.disabled = false;
+                }
+            }
+
+            showSuccess() {
+                // Ocultar formulario con animación
+                this.formContainer.classList.add('hidden');
+                
+                // Mostrar mensaje de éxito
+                setTimeout(() => {
+                    this.successMessage.classList.add('show');
+                }, 300);
+
+                // Resetear formulario
+                this.form.reset();
+                Object.keys(this.fields).forEach(fieldName => {
+                    this.clearFieldError(fieldName);
+                });
+            }
+        }
+
+        // Inicializar el formulario cuando se carga la página
+        document.addEventListener('DOMContentLoaded', () => {
+            new ContactForm();
+        });
+    </script>
+</body>
+</html>

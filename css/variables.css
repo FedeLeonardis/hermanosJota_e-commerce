@@ -1,0 +1,45 @@
+:root {
+  /* Colores principales */
+  --color-primary: #2D2A26;   /* Marrón oscuro madera */
+  --color-secondary: #8C6239; /* Marrón claro */
+  --color-accent: #D9B382;    /* Beige/acento */
+  --color-bg: #F9F7F5;        /* Fondo claro */
+  --color-text: #333333;      /* Texto principal */
+  --color-white: #ffffff;
+
+  /* Tipografías */
+  --font-title: 'Playfair Display', serif;
+  --font-body: 'Roboto', sans-serif;
+
+  /* Espaciado */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+
+  /* Bordes */
+  --radius: 8px;
+}
+
+
+/* Copilot - consejo */
+/* :root{
+  --burnt-sienna: #A0522D;
+  --sage-green: #87A96B;
+  --warm-alabaster: #F5E6D3;
+  --goldenrod: #D4A437;
+  --dusty-rose: #C47A6D;
+  --charcoal: #2C2C2C;
+  --soft-white: #FEFEFE;
+  --light-gray: #F8F8F8;
+  --brass-mate: #9C8B6E;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --container: 1200px;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-accent: 'Space Grotesk', sans-serif;
+} */

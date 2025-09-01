@@ -1,0 +1,20 @@
+#detalle-producto {
+  padding: var(--spacing-lg) var(--spacing-md);
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#detalle-producto img {
+  max-width: 100%;
+  border-radius: var(--radius);
+  margin-bottom: var(--spacing-md);
+}
+
+#detalle-producto h1 {
+  margin-bottom: var(--spacing-sm);
+}
+
+#detalle-producto p {
+  margin-bottom: var(--spacing-sm);
+}

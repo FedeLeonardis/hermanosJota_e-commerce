@@ -2,63 +2,12 @@
         background-color: #F5E6D3;
     }
     
-    header {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        height: 11vh;
-        border-bottom: 1px solid #A0522D;
-        /* border-left: 1px solid #A0522D;
-            border-right: 1px solid #A0522D; */
-        border-radius: 22px;
-        margin: 0vh 0vh 1vh 0vh;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    
-    .recuadro-logo {
-        border-radius: 10%;
-        background-color: #F5E6D3;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .logo {
-        margin: 0vh 2vh;
-        width: 80px;
-    }
-    
-    .menu-navegacion {
-        display: flex;
-        align-items: center;
-        flex-direction: row;
-        justify-content: space-around;
-        gap: 2vh;
-        padding-right: 10vw;
-    }
-    
-    .menu-navegacion>a {
-        display: flex;
-        text-decoration: none;
-        font-family: sans-serif;
-        font-size: medium;
-        color: #A0522D;
-    }
-    
-    .menu-navegacion>a:hover {
-        color: #F5E6D3;
-        background-color: #A0522D;
-        border-radius: 10px;
-        padding: 5px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    
     .hero-banner {
         position: relative;
         height: 80vh;
         justify-content: center;
         align-items: center;
-        background-image: url("Kit de imágenes/Fábrica-muebles.jpg");
+        background-image: url("../assets/img/imgs/Fábrica-muebles.jpg");
         background-size: cover;
         background-position: center;
         display: flex;

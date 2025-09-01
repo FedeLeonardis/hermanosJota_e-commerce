@@ -40,10 +40,10 @@ main {
   width: 250px;
   height: 250px;
   align-self: center;
-  transition: transform 0.4s ease; /* 👈 animación suave */
+  transition: transform 0.4s ease;
 }
 .card-producto:hover .img-producto {
-  transform: scale(1.1); /* 👈 zoom */
+  transform: scale(1.1);
 }
 h2.nombre-producto,
 h3.precio-producto {
@@ -57,7 +57,9 @@ h3.precio-producto {
 }
 form.buscar {
   padding-left: 35px;
-  margin-left: 40px; /* igual que el margin de .grid-container */
+  margin-bottom: 20px;
+  grid-column: 1 / -1;
+  justify-self: start;
 }
 input[type="search"] {
   width: 400px;
@@ -82,7 +84,7 @@ input[type="search"] {
   padding: 20px;
   margin-bottom: 30px;
   transition: transform 0.2s, box-shadow 0.2s;
-  overflow: hidden; /* 👈 evita que la imagen se salga del borde */
+  overflow: hidden;
 }
 .card-producto:hover {
   transform: translateY(-5px);
@@ -111,7 +113,7 @@ input[type="search"] {
   }
 
   input[type="search"] {
-    width: 200px;
+    width: 250px;
     height: 28px;
   }
 }
@@ -149,7 +151,7 @@ input[type="search"] {
   }
 
   input[type="search"] {
-    width: 180px;
+    width: 200px;
     height: 26px;
   }
 }

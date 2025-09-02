@@ -15,13 +15,6 @@
         margin: 0px 0px 5vh 0;
     }
     
-    .playfair-display-fuente {
-        font-family: "Playfair Display", serif;
-        font-optical-sizing: auto;
-        font-weight: 55px;
-        font-style: normal;
-    }
-    
     .texto-banner {
         position: absolute;
         color: #C47A6D;
@@ -37,17 +30,8 @@
         font-family: Georgia;
     }
     
-    .prueba1 {
-        color: #A0522D;
-        font-family: fuente;
-    }
-    
-    .prueba2 {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-    
-    h1 {
-        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    .hero-banner>p {
+        font-family: sans-serif;
     }
     
     .hero-banner:hover .texto-banner {
@@ -108,56 +92,11 @@
         border: 1px solid #A0522D;
     }
     
-    .env-footer {
-        display: flex;
-        justify-content: center;
-        margin: 0 0 4vh 0;
-        border: #C47A6D;
-        border-radius: 50px;
-    }
-    
-    footer {
-        width: 90%;
-        margin: 5vh 5vh 0vh 5vh;
-        padding: 2vh 5vw;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        border: #A0522D solid 1px;
-        border-radius: 20px;
-    }
-    
-    footer:hover {
-        background-color: #d4a53788;
-        background: linear-gradient(0deg, rgba(212, 165, 55, 0.43) 0%, rgba(245, 230, 211, 1) 100%);
-    }
-    
-    .destacado {
-        font-size: 150%;
-        font-family: sans-serif;
-        color: #A0522D;
-        text-align: start;
-    }
-    
-    .sub {
-        font-family: sans-serif;
-        font-size: 110%;
-        color: #A0522D;
-        text-align: start;
-    }
-    
-    .datos {
-        font-family: sans-serif;
-        font-size: 100%;
-        color: #000000;
-        text-align: start;
-    }
-    
     @media (max-width: 768px) {
         .productos-destacados {
             display: flex;
             flex-direction: column;
-            background-color: #f39c2a49;
+            background-color: #F5E6D3;
             gap: 2vw;
             padding: 1vw 4vw;
             justify-content: center;

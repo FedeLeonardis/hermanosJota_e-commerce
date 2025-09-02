@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +9,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/contacto.css">
+    <!-- <link rel="stylesheet" href="../css/header.css"> -->
+
 </head>
+
 <body>
-    <header id = "header"></header>
+
+    <!-- <header id="header"></header> -->
     <div class="container">
         <h1>Contacto</h1>
         <p class="subtitle">Nuestros clientes suelen tener preguntas. Necesitamos un formulario simple para que nos dejen sus dudas.</p>
-        
+
         <div class="form-container" id="formContainer">
             <form id="contactForm">
                 <div class="form-group">
@@ -49,7 +54,7 @@
         </div>
     </div>
 
-    <footer id = "footer"></footer>
+    <footer id="footer"></footer>
 
     <script>
         class ContactForm {
@@ -58,7 +63,7 @@
                 this.formContainer = document.getElementById('formContainer');
                 this.successMessage = document.getElementById('successMessage');
                 this.submitBtn = document.getElementById('submitBtn');
-                
+
                 this.fields = {
                     nombre: {
                         input: document.getElementById('nombre'),
@@ -166,7 +171,7 @@
             showSuccess() {
                 // Ocultar formulario con animación
                 this.formContainer.classList.add('hidden');
-                
+
                 // Mostrar mensaje de éxito
                 setTimeout(() => {
                     this.successMessage.classList.add('show');
@@ -185,7 +190,10 @@
             new ContactForm();
         });
     </script>
+    <!-- <footer id="footer"></footer>
+    <script src="../js/include.js"></script> -->
 </body>
+
 </html>
 
 

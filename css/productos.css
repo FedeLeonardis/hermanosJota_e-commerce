@@ -98,11 +98,6 @@ input[type="search"] {
 }
 
 @media (max-width: 767px) {
-    header {
-        flex-direction: column;
-        height: auto;
-        padding: 10px;
-    }
     .grid-container {
         grid-template-columns: 1fr;
         margin: 20px;

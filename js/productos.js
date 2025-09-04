@@ -17,7 +17,7 @@ async function renderizarProductos() {
       const card = document.createElement("div");
       card.classList.add("card-producto");
 
-      card.innerHTML = `<a class="link-producto" href="detalle.html?id=${
+      card.innerHTML = `<a class="link-producto" href="producto.html?id=${
         producto.id
       }">
       <img class="img-producto" src="${producto.img}" alt="${producto.nombre}">

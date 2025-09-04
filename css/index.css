@@ -7,7 +7,7 @@
         height: 80vh;
         justify-content: center;
         align-items: center;
-        background-image: url("../assets/img/imgs/Fábrica-muebles.jpg");
+        background-image: url("../assets/img/imgs/fabrica-mueble.jpg");
         background-size: cover;
         background-position: center;
         display: flex;
@@ -17,7 +17,7 @@
     
     .texto-banner {
         position: absolute;
-        color: #C47A6D;
+        color: #F5E6D3;
         text-align: center;
         opacity: 0;
         transform: translateY(20px);

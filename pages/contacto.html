@@ -14,58 +14,56 @@
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/home.css">
     <link rel="stylesheet" href="../css/header.css">
-
+    <link rel="stylesheet" href="../css/footer.css">
 </head>
 
 <body>
-
     <header id="header"></header>
+    <div class="container-global">
+        <div class="container">
+            <h1>Contacto</h1>
+            <p class="subtitle">Nuestros clientes suelen tener preguntas. Necesitamos un formulario simple para que nos dejen sus dudas.</p>
 
-    <div>
+            <div class="form-container" id="formContainer">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="nombre">Nombre *</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required>
+                        <div class="error" id="nombreError">Por favor, ingresa tu nombre</div>
+                    </div>
 
-    </div>
-    <div class="container">
-        <h1>Contacto</h1>
-        <p class="subtitle">Nuestros clientes suelen tener preguntas. Necesitamos un formulario simple para que nos dejen sus dudas.</p>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+                        <div class="error" id="emailError">Por favor, ingresa un email válido</div>
+                    </div>
 
-        <div class="form-container" id="formContainer">
-            <form id="contactForm">
-                <div class="form-group">
-                    <label for="nombre">Nombre *</label>
-                    <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required>
-                    <div class="error" id="nombreError">Por favor, ingresa tu nombre</div>
-                </div>
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje *</label>
+                        <textarea id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                        <div class="error" id="mensajeError">Por favor, ingresa tu mensaje</div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="email">Email *</label>
-                    <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
-                    <div class="error" id="emailError">Por favor, ingresa un email válido</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="mensaje">Mensaje *</label>
-                    <textarea id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
-                    <div class="error" id="mensajeError">Por favor, ingresa tu mensaje</div>
-                </div>
-
-                <button type="submit" class="btn" id="submitBtn">
+                    <button type="submit" class="btn" id="submitBtn">
                     <span>Enviar Mensaje</span>
                     <div class="loading"></div>
                 </button>
-            </form>
+                </form>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">✓</div>
+                <h3>¡Mensaje Enviado!</h3>
+                <p>Gracias por contactarnos. Nos pondremos en contacto contigo pronto.</p>
+            </div>
         </div>
 
-        <div class="success-message" id="successMessage">
-            <div class="success-icon">✓</div>
-            <h3>¡Mensaje Enviado!</h3>
-            <p>Gracias por contactarnos. Nos pondremos en contacto contigo pronto.</p>
-        </div>
     </div>
 
-    <!-- <footer id="footer"></footer> -->
+    <footer id="footer"></footer>
 
     <script src="../js/contacto.js"></script>
-    <!-- <script src="../js/include.js"></script> -->
+    <script src="../js/include.js"></script>
 
 </body>
 

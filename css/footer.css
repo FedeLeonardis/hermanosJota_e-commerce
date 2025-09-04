@@ -3,14 +3,14 @@
      justify-content: center;
      /* margin: 0 0 4vh 0; */
      border: #C47A6D;
-     border-radius: 50px;
+     /* border-radius: 50px; */
      background-color: #F5E6D3;
  }
  
  .env-footer {
      display: flex;
      width: 90%;
-     margin: 5vh 5vh 0vh 5vh;
+     /* margin: 5vh 5vh 0vh 5vh; */
      padding: 2vh 5vw;
      justify-content: space-between;
      border: #A0522D solid 1px;

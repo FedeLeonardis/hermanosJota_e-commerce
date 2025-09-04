@@ -18,6 +18,43 @@ body {
   height: 80px;
 }
 
+/* .link-producto {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: black;
+} */
+
+.link-producto {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: black;
+  position: relative; /* para posicionar el botón */
+  overflow: hidden;
+}
+
+.link-producto .btn-detalles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* centra horizontal y vertical */
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0; /* inicialmente invisible */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  border-radius: 5px;
+}
+
+.link-producto:hover .btn-detalles {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.05); /* efecto de aumento */
+}
+
 .img-producto {
   width: 250px;
   height: 250px;

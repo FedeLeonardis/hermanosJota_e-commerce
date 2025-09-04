@@ -148,7 +148,7 @@ const productos = [
     terminacion: "Laca semimate",
     medidas: "65 × 65 × 115 cm",
     features: ["Altura regulable", "Ruedas reforzadas", "Respaldo reclinable"],
-    img: "../../assets/img/productos/sillaDeTrabajoBelgrano.png",
+    img: "../assets/img/productos/sillaDeTrabajoBelgrano.png",
   },
   {
     id: 12,

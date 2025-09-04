@@ -17,14 +17,17 @@ async function renderizarProductos() {
       const card = document.createElement("div");
       card.classList.add("card-producto");
 
-      card.innerHTML = `
-        <img class="img-producto" src="${producto.img}" alt="${
-        producto.nombre
+      card.innerHTML = `<a class="link-producto" href="detalle.html?id=${
+        producto.id
       }">
+      <img class="img-producto" src="${producto.img}" alt="${producto.nombre}">
         <h2 class="nombre-producto">${producto.nombre}</h2>
         <h3 class="precio-producto">$${producto.precio.toLocaleString(
           "es-AR"
         )}</h3>
+        <button class="btn-detalles">VER DETALLES</button>
+
+      </a>
       `;
 
       contenedor.appendChild(card);

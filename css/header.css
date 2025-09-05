@@ -5,6 +5,7 @@
      align-items: center;
      justify-content: space-between;
      height: 11vh;
+     width: 100%;
      border-bottom: 1px solid #A0522D;
      border-radius: 22px;
      margin: 0vh 0vh 1vh 0vh;
@@ -16,11 +17,12 @@
      background-color: #F5E6D3;
      justify-content: center;
      align-items: center;
+     height: 100%;
+     /* min-height: 60px; */
  }
  
  .logo {
-     margin: 0vh 2vh;
-     width: 80px;
+     height: 100%;
  }
  
  .menu-navegacion {
@@ -30,6 +32,7 @@
      justify-content: space-around;
      gap: 2vh;
      padding-right: 10vw;
+     width: 46%;
  }
  
  .menu-navegacion>a {
@@ -49,10 +52,41 @@
  }
  
  .icono-carro {
-     width: 32vw;
+     width: 32vh;
+     min-width: 5vh;
  }
  
  #cart-count {
      background-color: #D4A437;
      color: #A0522D;
+     height: 60%;
+ }
+ 
+ @media (max-width: 768px) {
+     #header {
+         flex-direction: column;
+         height: auto;
+         padding: 1vh;
+         justify-content: center;
+         width: 100%;
+     }
+     .menu-navegacion {
+         flex-direction: row;
+         width: 100%;
+         padding-right: 0;
+         gap: 1vh;
+     }
+     .logo {
+         height: 15vh;
+         min-height: 500%
+     }
+     .recuadro-logo {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+     }
+     .icono-carro {
+         width: 10vw;
+         max-width: 40px;
+     }
  }

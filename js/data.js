@@ -23,7 +23,7 @@ const productos = [
                 acabado: "Laca mate ecológica",
                 modulares: "5 estantes ajustables",
                 capacidad: "45 kg por estante"},
-    img: "../assets/img/productos/BibliotecaRecoleta.png",
+    img: "../assets/img/productos/bibliotecaRecoleta.png",
   },
   {
     id: 3,

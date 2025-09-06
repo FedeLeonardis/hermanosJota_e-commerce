@@ -67,16 +67,13 @@ function mostrarProductos(lista) {
     const card = document.createElement("div");
     card.classList.add("card-producto");
 
-    card.innerHTML = `<a class="link-producto" href="producto.html?id=${
-      producto.id
-    }">
+    card.innerHTML =
+     `<a class="link-producto" href="producto.html?id=${producto.id}">
       <img class="img-producto" src="${producto.img}" alt="${producto.nombre}">
       <h2 class="nombre-producto">${producto.nombre}</h2>
-      <h3 class="precio-producto">$${producto.precio.toLocaleString(
-        "es-AR"
-      )}</h3>
+      <h3 class="precio-producto">$${producto.precio.toLocaleString("es-AR")}</h3>
       <button class="btn-detalles">VER DETALLES</button>
-    </a>`;
+      </a>`;
 
     contenedor.appendChild(card);
   });

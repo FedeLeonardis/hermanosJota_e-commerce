@@ -1,22 +1,36 @@
-// Selecciono la sección directamente
-const destacadosContainer = document.querySelector(".productos-destacados");
+document.addEventListener("DOMContentLoaded", () => {
+    const destacadosContainer = document.querySelector(".productos-destacados");
 
-// Tomo 3 productos aleatorios
-function obtenerProductosAleatorios(cantidad) {
-    const copia = [...productos].sort(() => 0.5 - Math.random());
-    return copia.slice(0, cantidad);
-}
+    if (!destacadosContainer) {
+        console.error("No se encontró el contenedor .productos-destacados");
+        return;
+    }
 
-const destacados = obtenerProductosAleatorios(3);
+    if (typeof productos === "undefined" || !Array.isArray(productos)) {
+        console.error("Los datos de productos no están disponibles");
+        return;
+    }
 
-// Renderizo después del <h2>
-destacados.forEach(prod => {
-    const div = document.createElement("div");
-    div.classList.add("producto");
-    div.innerHTML = `
-    <img src="${prod.img}" alt="${prod.nombre}">
-    <h3>${prod.nombre}</h3>
-    <p>$${prod.precio}</p>
-  `;
-    destacadosContainer.appendChild(div);
+    function obtenerProductosAleatorios(cantidad) {
+        const copia = [...productos].sort(() => 0.5 - Math.random());
+        return copia.slice(0, cantidad);
+    }
+
+    const destacados = obtenerProductosAleatorios(3);
+
+    destacados.forEach(prod => {
+        const link = document.createElement("a");
+        link.href = `producto.html?id=${prod.id}`;
+        link.classList.add("producto");
+
+        link.innerHTML = `
+      <img src="${prod.img}" alt="${prod.nombre}">
+      <h3>${prod.nombre}</h3>
+      <p>$${prod.precio}</p>
+    `;
+
+        destacadosContainer.appendChild(link);
+    });
+
+    console.log("Se cargaron 3 productos destacados aleatorios");
 });

@@ -26,14 +26,6 @@
         border-radius: 10px;
     }
     
-    .texto-banner>h1 {
-        font-family: Georgia;
-    }
-    
-    .hero-banner>p {
-        font-family: sans-serif;
-    }
-    
     .hero-banner:hover .texto-banner {
         opacity: 1;
         transform: translateY(0);
@@ -80,6 +72,12 @@
     .producto p {
         font-size: 0.9rem;
         color: #555;
+    }
+    
+    .productos-destacados a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
     }
     
     .producto:hover {

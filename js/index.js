@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
         link.innerHTML = `
       <img src="${prod.img}" alt="${prod.nombre}">
       <h3>${prod.nombre}</h3>
-      <p>$${prod.precio}</p>
     `;
 
         destacadosContainer.appendChild(link);

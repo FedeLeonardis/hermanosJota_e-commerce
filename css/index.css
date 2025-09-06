@@ -69,11 +69,6 @@
         font-family: sans-serif;
     }
     
-    .producto p {
-        font-size: 0.9rem;
-        color: #555;
-    }
-    
     .productos-destacados a {
         text-decoration: none;
         color: inherit;

@@ -66,16 +66,6 @@ function renderProduct(product) {
   const description = document.querySelector("#descripcion");
   if (description) description.textContent = product.descripcion;
   
-  // Detalles técnicos
-  const wood = document.querySelector("#madera");
-  if (wood) wood.textContent = product.madera;
-  
-  const finish = document.querySelector("#terminacion");
-  if (finish) finish.textContent = product.terminacion;
-  
-  const dimensions = document.querySelector("#medidas");
-  if (dimensions) dimensions.textContent = product.medidas;
-  
   // Imagen principal
   const mainImage = document.querySelector("#imgPrincipal");
   if (mainImage) {
@@ -87,12 +77,32 @@ function renderProduct(product) {
   const featuresContainer = document.querySelector("#features");
   if (featuresContainer && product.features) {
     featuresContainer.innerHTML = "";
-    product.features.forEach((feature) => {
-      const chip = document.createElement("span");
-      chip.className = "chip";
-      chip.textContent = feature;
-      featuresContainer.appendChild(chip);
+    
+    // Crear tabla HTML
+    const table = document.createElement("table");
+    table.className = "features-table";
+    
+    const tbody = document.createElement("tbody");
+    
+    // Iterar sobre las claves del objeto features
+    Object.entries(product.features).forEach(([key, value]) => {
+      const row = document.createElement("tr");
+      
+      const labelCell = document.createElement("td");
+      labelCell.className = "feature-label";
+      labelCell.textContent = key.toUpperCase();
+      
+      const valueCell = document.createElement("td");
+      valueCell.className = "feature-value";
+      valueCell.textContent = value;
+      
+      row.appendChild(labelCell);
+      row.appendChild(valueCell);
+      tbody.appendChild(row);
     });
+    
+    table.appendChild(tbody);
+    featuresContainer.appendChild(table);
   }
   
   // Actualizar título de la página

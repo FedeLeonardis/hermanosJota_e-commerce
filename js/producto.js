@@ -6,8 +6,12 @@ function addProductToCart() {
   const urlParams = new URLSearchParams(window.location.search);
   const productId = parseInt(urlParams.get("id")) || 1;
   
+  // Obtener la cantidad seleccionada
+  const quantityInput = document.querySelector("#cantidad");
+  const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+  
   // Usar la función global de utils.js
-  addToCart(productId, 1);
+  addToCart(productId, quantity);
   
   // Feedback visual
   const stockBadge = document.querySelector("#estadoStock");

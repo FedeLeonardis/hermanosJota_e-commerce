@@ -10,7 +10,7 @@
 .env-footer {
     display: flex;
     width: 100%;
-    max-width: 1200px;
+    max-width: 100%;
     padding: 3vh 4vw;
     justify-content: space-around;
     border: #A0522D solid 1px;

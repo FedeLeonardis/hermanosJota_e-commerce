@@ -7,7 +7,7 @@
 
 .env-footer {
     display: flex;
-    width: 90%;
+    width: 100%;
     /* height: auto; */
     padding: 2vh 5vw;
     justify-content: space-around;

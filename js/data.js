@@ -154,5 +154,5 @@ const productos = [
                 regulación: "Altura + inclinación respaldo",
                 certificación: "Ergonomía europea EN 1335"},
     img: "../assets/img/productos/sillaDeTrabajoBelgrano.png",
-  },
+  }
 ];

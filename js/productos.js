@@ -94,10 +94,6 @@ async function inicializarCatalogo() {
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, ""),
-    maderaNorm: p.madera
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, ""),
   }));
 
   // Mostrar todos los productos al inicio
@@ -116,7 +112,7 @@ function configurarBusqueda() {
 
     const filtrados = window.productosNormalizados.filter(
       (p) =>
-        p.nombreNorm.includes(textoNorm) || p.maderaNorm.includes(textoNorm)
+        p.nombreNorm.includes(textoNorm)
     );
 
     mostrarProductos(filtrados);

@@ -1,4 +1,4 @@
- #header {
+#header {
      display: flex;
      background-color: #F5E6D3;
      flex-direction: row;
@@ -10,83 +10,112 @@
      border-radius: 22px;
      margin: 0vh 0vh 1vh 0vh;
      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
- }
- 
- .recuadro-logo {
-     border-radius: 10%;
-     background-color: #F5E6D3;
-     justify-content: center;
-     align-items: center;
-     height: 100%;
-     /* min-height: 60px; */
- }
- 
- .logo {
-     height: 100%;
- }
- 
- .menu-navegacion {
-     display: flex;
-     align-items: center;
-     flex-direction: row;
-     justify-content: space-around;
-     gap: 2vh;
-     padding-right: 10vw;
-     width: 46%;
- }
- 
- .menu-navegacion>a {
-     display: flex;
-     text-decoration: none;
-     font-family: sans-serif;
-     font-size: medium;
-     color: #A0522D;
- }
- 
- .menu-navegacion>a:hover {
-     color: #F5E6D3;
-     background-color: #A0522D;
-     border-radius: 10px;
-     padding: 5px;
-     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
- }
- 
- .icono-carro {
-     width: 32vh;
-     min-width: 5vh;
- }
- 
- #cart-count {
-     background-color: #D4A437;
-     color: #A0522D;
-     height: 60%;
- }
- 
- @media (max-width: 768px) {
-     #header {
-         flex-direction: column;
-         height: auto;
-         padding: 1vh;
-         justify-content: center;
-         width: 100%;
-     }
-     .menu-navegacion {
-         flex-direction: row;
-         width: 100%;
-         padding-right: 0;
-         gap: 1vh;
-     }
-     .logo {
-         height: 15vh;
-         min-height: 500%
-     }
-     .recuadro-logo {
-         display: flex;
-         align-items: center;
-         justify-content: center;
-     }
-     .icono-carro {
-         width: 10vw;
-         max-width: 40px;
-     }
- }
+}
+
+.cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #F5E6D3;
+  border-radius: 10px;
+}
+
+.cart img { 
+  position: relative;
+  width: 40px;
+  height: 30px;
+}
+
+/* Badge del contador */
+#cart-count {
+  position: absolute;
+  top: -8px;        /* ajustá según tu ícono */
+  right: 40px;      /* ajustá según tu ícono */
+  border-radius: 50%;
+  width: 20px;      /* ancho fijo */
+  height: 30px;     /* alto fijo */
+  display: flex;    /* flex para centrar */
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  background-color: #D4A437;
+  color: #A0522D;
+  height: 60%;
+}
+
+
+.recuadro-logo {
+    border-radius: 10%;
+    background-color: #F5E6D3;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    /* min-height: 60px; */
+}
+
+.logo {
+    height: 100%;
+}
+
+.menu-navegacion {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 2vh;
+    padding-right: 10vw;
+    width: 46%;
+}
+
+.menu-navegacion>a {
+    display: flex;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-size: medium;
+    color: #A0522D;
+}
+
+.menu-navegacion>a:hover {
+    color: #F5E6D3;
+    background-color: #A0522D;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.icono-carro {
+    width: 32vh;
+    min-width: 5vh;
+}
+
+
+@media (max-width: 768px) {
+    #header {
+        flex-direction: column;
+        height: auto;
+        padding: 1vh;
+        justify-content: center;
+        width: 100%;
+    }
+    .menu-navegacion {
+        flex-direction: row;
+        width: 100%;
+        padding-right: 0;
+        gap: 1vh;
+    }
+    .logo {
+        height: 15vh;
+        min-height: 500%
+    }
+    .recuadro-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .icono-carro {
+        width: 10vw;
+        max-width: 40px;
+    }
+}

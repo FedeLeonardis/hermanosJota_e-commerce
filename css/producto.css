@@ -71,12 +71,31 @@ body {
   gap: 16px;
 }
 
+.gallery-container {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--goldenrod);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.3s ease;
+}
+
+.gallery-container:hover {
+  box-shadow: var(--shadow-lg);
+}
+
 .gallery-media {
   width: 100%;
   height: 400px;
   object-fit: cover;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  background: var(--light-gray);
+  transition: transform 0.3s ease;
+  cursor: zoom-in;
+  display: block;
+  border: none;
+}
+
+.gallery-media:hover {
+  transform: scale(1.10);
 }
 
 .thumbs {
@@ -92,6 +111,7 @@ body {
   border-radius: var(--radius-md);
   cursor: pointer;
   border: 2px solid transparent;
+  border-color: var(--goldenrod);
   transition: border-color 0.2s ease;
 }
 
@@ -151,6 +171,42 @@ body {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Selector de cantidad */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-label {
+  font-weight: 500;
+  color: var(--charcoal);
+  font-size: 0.95rem;
+}
+
+.quantity-input {
+  width: 60px;
+  padding: 8px 12px;
+  border: 2px solid var(--light-gray);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  background: white;
+  color: var(--charcoal);
+  transition: border-color 0.2s ease;
+}
+
+.quantity-input:focus {
+  outline: none;
+  border-color: var(--sage-green);
+}
+
+.quantity-input:hover {
+  border-color: var(--sage-green);
 }
 
 .btn {
@@ -247,6 +303,30 @@ body {
   
   .cta {
     flex-wrap: nowrap;
+  }
+  
+  .quantity-selector {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 767px) {
+  .cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .quantity-selector {
+    justify-content: center;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+  
+  /* Reducir el zoom en móviles para evitar problemas de UX */
+  .gallery-media:hover {
+    transform: scale(1.02);
   }
 }
 

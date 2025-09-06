@@ -228,38 +228,3 @@ textarea {
         font-size: 2em;
     }
 }
-
-
-/* .contacto {
-  padding: var(--spacing-lg) var(--spacing-md);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.contacto form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.contacto label {
-  font-weight: bold;
-}
-
-.contacto input,
-.contacto textarea {
-  padding: var(--spacing-xs);
-  border: 1px solid #ccc;
-  border-radius: var(--radius);
-}
-
-.contacto button {
-  align-self: flex-start;
-}
-
-#form-response {
-  margin-top: var(--spacing-sm);
-  font-weight: bold;
-  color: green;
-}
- */

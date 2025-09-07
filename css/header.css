@@ -31,21 +31,24 @@
 
 /* Badge del contador */
 #cart-count {
-  position: absolute;
-  top: -8px;        /* ajustá según tu ícono */
-  right: 40px;      /* ajustá según tu ícono */
-  border-radius: 50%;
-  width: 20px;      /* ancho fijo */
-  height: 30px;     /* alto fijo */
-  display: flex;    /* flex para centrar */
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: bold;
-  background-color: #D4A437;
-  color: #A0522D;
-  height: 60%;
+    position: absolute;
+    top: -25%;        
+    right: 60%;      
+    border-radius: 10px;     
+    min-width: 20px;         /* ancho mínimo */
+    height: 20px;            /* alto fijo */
+    padding: 0 4px;          
+    padding-top: 1px;
+    display: flex;           
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    background-color: #D4A437;
+    color: #A0522D;
+    box-sizing: border-box;  
 }
+
 
 
 .recuadro-logo {
@@ -153,10 +156,11 @@
     }
     
     #cart-count {
-        right: 30px;
-        top: -10px;
-        width: 18px;
+        top: -25%;        
+        right: 60%; 
+        min-width: 18px;
         height: 18px;
+        padding: 0 3px;
         font-size: 0.7rem;
     }
 }
@@ -187,5 +191,13 @@
         height: 8vh;
         min-height: 60px;
         max-height: 80px;
+    }
+    #cart-count {
+        top: -25%;
+        right: 60%;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 2px;
+        font-size: 0.65rem;
     }
 }

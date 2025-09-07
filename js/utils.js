@@ -5,7 +5,10 @@
  * @returns {number} Cantidad de productos en el carrito
  */
 function getCartCount() {
-  return parseInt(localStorage.getItem("cart-count") || "0");
+  // parseInt con base y manejo de NaN
+  const raw = localStorage.getItem("cart-count");
+  const n = parseInt(raw || "0", 10);
+  return Number.isNaN(n) ? 0 : n;
 }
 
 /**
@@ -13,8 +16,11 @@ function getCartCount() {
  * @param {number} count - Nueva cantidad
  */
 function setCartCount(count) {
-  localStorage.setItem("cart-count", String(count));
-  updateCartDisplay(count);
+  // Normalizar a entero no negativo
+  const c = Math.max(0, Math.floor(Number(count) || 0));
+  localStorage.setItem("cart-count", String(c));
+  // Actualizar inmediatamente la UI (si el badge existe en la página)
+  updateCartDisplay(c);
 }
 
 /**
@@ -25,8 +31,65 @@ function updateCartDisplay(count) {
   const cartBadge = document.querySelector("#cart-count");
   if (cartBadge) {
     cartBadge.textContent = count;
-    cartBadge.style.display = count > 0 ? "inline" : "none";
   }
+}
+
+/**
+ * Agrega cantidad al contador del carrito
+ * @param {number} quantity - Cantidad a agregar (por defecto 1)
+ */
+function addToCart(quantity = 1) {
+  const old_quantity = getCartCount();
+  const new_quantity = old_quantity + quantity;
+  setCartCount(new_quantity);
+}
+
+// Vacía el carrito: borra la clave y actualiza la UI
+function clearCart() {
+  localStorage.removeItem('cart-count');
+  updateCartDisplay(0);
+}
+
+// Vincula los botones del popup del header (vaciar carrito, finalizar compra)
+function setupCartPopupListeners() {
+  const clearBtn = document.getElementById('clear-cart');
+  const checkoutBtn = document.getElementById('checkout');
+  if (clearBtn) clearBtn.addEventListener('click', clearCart);
+  if (checkoutBtn) checkoutBtn.addEventListener('click', () => {
+    console.log('Finalizar compra - funcionalidad pendiente');
+  });
+}
+
+// controlar apertura del popup del carrito por click ---
+function toggleCartPopup(open) {
+  const cart = document.querySelector('.cart');
+  if (!cart) return;
+  if (typeof open === 'boolean') {
+    cart.classList.toggle('open', open);
+  } else {
+    cart.classList.toggle('open');
+  }
+}
+
+function setupCartClickHandlers() {
+  const cart = document.querySelector('.cart');
+  if (!cart) return;
+
+  // Toggle al hacer click en el contenedor del carrito (icono o badge)
+  cart.addEventListener('click', (e) => {
+    // Evitar que clicks en los botones internos cierren/reaperturen inesperadamente
+    const target = e.target;
+    if (target.closest('.cart-popup')) return;
+    toggleCartPopup();
+  });
+
+  // Cerrar si se hace click fuera del popup
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (!cart.classList.contains('open')) return;
+    if (target.closest('.cart')) return; // click dentro -> no cerrar
+    toggleCartPopup(false);
+  });
 }
 
 /**
@@ -34,48 +97,23 @@ function updateCartDisplay(count) {
  */
 function initializeCart() {
   const currentCount = getCartCount();
+  // Actualizar badge si ya existe
   updateCartDisplay(currentCount);
+  // Vincular handlers de click para abrir/cerrar el popup del carrito
+  setupCartClickHandlers();
+  // Vincular listeners del popup (si el header ya está presente)
+  setupCartPopupListeners();
+
 }
 
-/**
- * Obtiene el carrito completo desde localStorage
- * @returns {Array} Array de productos en el carrito
- */
-function getCart() {
-  const cart = localStorage.getItem("cart-items");
-  return cart ? JSON.parse(cart) : [];
-}
+// Escuchar evento personalizado 'header:ready' (disparado por include.js)
+// para inicializar el badge justo cuando el header fue insertado.
+document.addEventListener('header:ready', initializeCart);
 
-/**
- * Guarda el carrito completo en localStorage
- * @param {Array} cart - Array de productos
- */
-function saveCart(cart) {
-  localStorage.setItem("cart-items", JSON.stringify(cart));
-  setCartCount(cart.reduce((total, item) => total + item.quantity, 0));
-}
-
-/**
- * Agrega un producto específico al carrito
- * @param {number} productId - ID del producto
- * @param {number} quantity - Cantidad a agregar (por defecto 1)
- */
-function addToCart(productId, quantity = 1) {
-  const cart = getCart();
-  const existingItem = cart.find(item => item.id === parseInt(productId));
-  
-  if (existingItem) {
-    existingItem.quantity += quantity;
-  } else {
-    cart.push({
-      id: parseInt(productId),
-      quantity: quantity,
-      addedAt: new Date().toISOString()
-    });
+// Sincronizar el contador entre pestañas: si otra pestaña modifica
+// `localStorage['cart-count']`, reflejar el cambio en el badge.
+window.addEventListener('storage', (e) => {
+  if (e.key === 'cart-count') {
+    updateCartDisplay(getCartCount());
   }
-  
-  saveCart(cart);
-}
-
-// Inicializar el carrito cuando el DOM esté listo
-document.addEventListener("DOMContentLoaded", initializeCart);
+});

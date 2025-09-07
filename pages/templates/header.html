@@ -7,6 +7,11 @@
     <a href="contacto.html">CONTACTO</a>
     <div class="cart">
         <img class="icono-carro" src="../assets/img/icons/carrito.svg" alt="Carrito">
-        <span id="cart-count">0</span>
+                <span id="cart-count">0</span>
+                <!-- Popup al pasar el mouse sobre el carrito -->
+                <div class="cart-popup" aria-hidden="true">
+                    <button id="clear-cart" type="button" class="popup-btn">Vaciar carrito</button>
+                    <button id="checkout" type="button" class="popup-btn">Finalizar compra</button>
+                </div>
     </div>
 </nav>

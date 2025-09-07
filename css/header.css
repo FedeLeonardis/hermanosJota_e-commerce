@@ -21,6 +21,9 @@
   position: relative;
   background: #F5E6D3;
   border-radius: 10px;
+  cursor: pointer; /* indica que es interactivo */
+  transition: transform 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+  will-change: transform;
 }
 
 .cart img { 
@@ -28,6 +31,50 @@
   width: 40px;
   height: 30px;
 }
+
+/* Efecto visual al pasar el mouse: agranda y resalta el carrito (no abre el popup) */
+.cart:hover {
+    transform: translateY(-2px) scale(1.06);
+    background-color: #F0D2B8; /* ligero cambio para indicar clickeable */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.14);
+}
+
+.cart:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Popup que aparece al hacer click sobre .cart */
+.cart-popup {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background: white;
+    border: 1px solid;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 50;
+    border-color: #D4A437;
+}
+
+/* Mostrar popup cuando .cart tenga la clase .open (controlado por JS) */
+.cart.open .cart-popup {
+    display: flex;
+}
+
+.popup-btn {
+    background: #D4A437;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.popup-btn#clear-cart { background: #C47A6D; }
+.popup-btn#checkout { background: #6C8A5E; }
 
 /* Badge del contador */
 #cart-count {

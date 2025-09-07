@@ -2,16 +2,13 @@
  * Agrega el producto actual al carrito y muestra feedback
  */
 function addProductToCart() {
-  // Obtener el ID del producto actual
-  const urlParams = new URLSearchParams(window.location.search);
-  const productId = parseInt(urlParams.get("id")) || 1;
   
   // Obtener la cantidad seleccionada
   const quantityInput = document.querySelector("#cantidad");
   const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
   
   // Usar la función global de utils.js
-  addToCart(productId, quantity);
+  addToCart(quantity);
   
   // Feedback visual
   const stockBadge = document.querySelector("#estadoStock");

@@ -2,11 +2,11 @@
 
 ## Integrantes
 
- Walter Arias Molino
- Tomás Sebastián Picco
- Federico Leonardis Ayala
- Malena Zoe Blanco Di Beco
- Aymara Bravo
+- Walter Arias Molino
+- Tomás Sebastián Picco
+- Federico Leonardis Ayala
+- Malena Zoe Blanco Di Beco
+- Aymara Bravo
 
 ## Nombre del proyecto
 

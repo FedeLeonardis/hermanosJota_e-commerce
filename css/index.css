@@ -5,6 +5,7 @@
     .hero-banner {
         position: relative;
         height: 80vh;
+        padding-top: 11vh; /* dejar espacio para el header */
         justify-content: center;
         align-items: center;
         background-image: url("../assets/img/banners/fabrica-mueble.jpg");
@@ -13,6 +14,7 @@
         display: flex;
         overflow: hidden;
         margin: 0px 0px 5vh 0;
+        z-index: 0;
     }
     
     .texto-banner {

@@ -1,6 +1,8 @@
 #header {
      display: flex;
      background-color: #F5E6D3;
+     position: relative;
+     z-index: 1000;
      flex-direction: row;
      align-items: center;
      justify-content: space-between;

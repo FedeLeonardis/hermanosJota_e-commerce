@@ -1,15 +1,17 @@
-.container-global {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #F5E6D3;
+    background: linear-gradient(135deg, #A0522D 0%, #87A96B 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
-}
-
-body {
-    background-color: #F5E6D3;
 }
 
 .container {
@@ -67,8 +69,7 @@ label {
     font-size: 0.95em;
 }
 
-input,
-textarea {
+input, textarea {
     width: 100%;
     padding: 15px;
     border: 2px solid #F5E6D3;
@@ -76,14 +77,16 @@ textarea {
     font-size: 16px;
     transition: all 0.3s ease;
     background: #F5E6D3;
+    color: #000000; 
+    caret-color: #000000; 
 }
 
-input:focus,
-textarea:focus {
+input:focus, textarea:focus {
     outline: none;
     border-color: #87A96B;
     background: white;
     box-shadow: 0 0 0 3px rgba(135, 169, 107, 0.2);
+    color: #000000; 
 }
 
 textarea {
@@ -164,34 +167,29 @@ textarea {
 }
 
 .form-container {
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
+    overflow: hidden;
+    max-height: 2000px;
 }
 
 .form-container.hidden {
     opacity: 0;
     transform: translateY(-20px);
+    max-height: 0;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    pointer-events: none;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .loading {
@@ -206,9 +204,7 @@ textarea {
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
 }
 
 .btn.loading .loading {
@@ -219,12 +215,49 @@ textarea {
     display: none;
 }
 
+
+input::placeholder,
+textarea::placeholder {
+    color: #666666;
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 30px 20px;
         margin: 10px;
     }
+    
     h1 {
         font-size: 2em;
     }
+}
+
+
+html, body, #root {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: #F5E6D3 !important;
+    background-image: none !important;
+    display: block !important;
+    padding: 0 !important;
+}
+
+.container-global {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #F5E6D3;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+
+.container {
+    margin: 0 auto;
+    max-width: 500px;
+    width: 100%;
 }

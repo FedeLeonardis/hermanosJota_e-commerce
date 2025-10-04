@@ -1,7 +1,7 @@
 const express = require("express");
 const productosRouter = express.Router();
 
-const productos = require("../../frontend/src/data");
+const productos = require("../data/productos");
 
 productosRouter.get("/", (req, res) => {
   res.json(productos);
@@ -12,7 +12,7 @@ productosRouter.get("/:id", (req, res) => {
   if (!producto) {
     return res.status(400).json({ message: "Producto no encontrado." });
   }
-  console.log("check");
+
   res.json(producto);
 });
 

@@ -1,27 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { productos } from "../data.js";
 import { useCart } from "../context/CartContext";
 import "../css/producto.css";
 
 const ProductDetail = () => {
   const { id } = useParams();
-
   const { addToCart } = useCart();
+
   const [producto, setProducto] = useState(null);
   const [cantidad, setCantidad] = useState(1);
   const [feedback, setFeedback] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    const productoEncontrado = productos.find((p) => p.id === parseInt(id));
+    // Cargar producto desde el backend
+    fetch(`http://localhost:5000/api/productos/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al obtener producto");
+        return res.json();
+      })
+      .then((data) => {
+        setProducto(data);
+        document.title = `HJ — ${data.nombre}`;
+      })
+      .catch((err) => {
+        console.error("Error al cargar producto:", err);
+      });
 
-    if (productoEncontrado) {
-      setProducto(productoEncontrado);
-      document.title = `HJ — ${productoEncontrado.nombre}`;
-    } else {
-      console.error(`Producto con ID ${id} no encontrado.`);
-    }
     setFeedback("");
     setCantidad(1);
   }, [id]);
@@ -31,7 +36,6 @@ const ProductDetail = () => {
   }
 
   const { nombre, descripcion, precio, features, img } = producto;
-
   const titulo = nombre;
   const subtitulo = "Madera de autor · Hecho a mano";
   const stock = 10;
@@ -43,18 +47,10 @@ const ProductDetail = () => {
 
   const handleAgregarCarrito = () => {
     addToCart(cantidad);
-
     setFeedback("Agregado ✔");
-
     setIsAnimating(true);
-
-    setTimeout(() => {
-      setFeedback("");
-    }, 2000);
-
-    setTimeout(() => {
-      setIsAnimating(false);
-    }, 150);
+    setTimeout(() => setFeedback(""), 2000);
+    setTimeout(() => setIsAnimating(false), 150);
   };
 
   const feedbackStyle = feedback

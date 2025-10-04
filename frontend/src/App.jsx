@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import { CartProvider } from "./context/CartContext";
@@ -8,6 +8,8 @@ import Footer from "./components/Footer.jsx";
 import Catalogo from "./components/Catalogo.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
 import HomePage from "./components/HomePage.jsx";
+import Contacto from "./components/contacto.jsx";
+import ScrollToTop from "./components/ScrollToTop";
 import "./css/reset.css";
 import "./css/variables.css";
 import "./css/global.css";
@@ -18,7 +20,7 @@ function App() {
   return (
     <CartProvider>
       <Header />
-
+      <ScrollToTop />
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -28,7 +30,7 @@ function App() {
           <Route path="/productos/:id" element={<ProductDetail />} />
 
           <Route path="/contacto" element={<Contacto />} />
-          
+
           <Route path="/" element={<HomePage />} />
 
           <Route path="*" element={<h2>Error 404: Página no encontrada</h2>} />

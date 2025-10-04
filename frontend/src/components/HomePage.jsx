@@ -11,7 +11,7 @@ const HomePage = () => {
       <div className="hero-banner">
         <div className="texto-banner">
           <h1>
-            “cxzcCada pieza cuenta la historia de manos expertas y materiales
+            “Cada pieza cuenta la historia de manos expertas y materiales
             nobles”
           </h1>
           <p>-Hnos Jota</p>

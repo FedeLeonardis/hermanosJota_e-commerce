@@ -12,6 +12,7 @@ productosRouter.get("/:id", (req, res) => {
   if (!producto) {
     return res.status(400).json({ message: "Producto no encontrado." });
   }
+  console.log("check");
   res.json(producto);
 });
 

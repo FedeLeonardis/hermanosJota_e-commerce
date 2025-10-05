@@ -1,20 +1,20 @@
 // import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { CartProvider } from "./context/CartContext";
+import { CartProvider } from "./context/CartContext.jsx";
 
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Catalogo from "./components/Catalogo.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
 import HomePage from "./components/HomePage.jsx";
-import Contacto from "./components/contacto.jsx";
-import ScrollToTop from "./components/ScrollToTop";
+import Contacto from "./components/Contacto.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+
 import "./css/reset.css";
 import "./css/variables.css";
 import "./css/global.css";
 
-const ContactPage = () => <h1>Formulario de Contacto 💬</h1>;
 
 function App() {
   return (

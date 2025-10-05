@@ -1,16 +1,20 @@
 const express = require("express");
-const app = express();
-
 const cors = require("cors");
-app.use(cors());
-const puerto = process.env.PORT || 5000;
-app.use(express.json());
 const productosRouter = require("./routes/productosRoutes");
 const loggerMiddleware = require("./middleware/logger");
+
+const puerto = process.env.PORT || 5000;
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
 app.use(loggerMiddleware);
+
 app.get("/", (req, res) => {
   res.send("Bienvenido al API de Muebleria Jota en el repo");
 });
+
 app.use("/api/productos", productosRouter);
 
 app.use((req, res, next) => {
@@ -25,6 +29,7 @@ app.use((err, req, res, next) => {
   console.error({ statusCode, message, stack: err.stack });
   res.status(statusCode).json({ error: message });
 });
+
 app.listen(puerto, () => {
   console.log(`El servidor esta corriendo en el puerto ${puerto}`);
 });

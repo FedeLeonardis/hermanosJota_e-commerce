@@ -6,6 +6,7 @@ const productos = require("../data/productos");
 productosRouter.get("/", (req, res) => {
   res.json(productos);
 });
+
 productosRouter.get("/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const producto = productos.find((p) => p.id === id);

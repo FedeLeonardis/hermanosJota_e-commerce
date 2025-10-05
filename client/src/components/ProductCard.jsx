@@ -6,6 +6,7 @@ import "../css/global.css";
 
 /**
  * Tarjeta individual del catálogo. Expone un callback cuando se selecciona.
+ * Soporta interacción con teclado para accesibilidad.
  */
 function ProductCard({ producto, onSelect = () => {} }) {
   // Normaliza la acción de selección desde teclado o mouse.

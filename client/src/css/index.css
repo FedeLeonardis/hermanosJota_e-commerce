@@ -14,7 +14,7 @@
     min-height: clamp(360px, 72vh, 560px);
     display: block;
     border-radius: var(--radius-lg);
-    background: var(--color-primary) url("../assets/img/banners/fabrica-mueble.jpg") center/cover no-repeat;
+    background: var(--color-primary) url("/assets/img/banners/fabrica-mueble.jpg") center/cover no-repeat;
     overflow: hidden;
     box-shadow: var(--shadow-soft);
 }

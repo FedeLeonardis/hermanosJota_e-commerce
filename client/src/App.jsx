@@ -1,8 +1,6 @@
-import "./css/reset.css";
-import "./css/variables.css";
-import "./css/global.css";
 import { useState } from "react";
 
+// Componentes de alto nivel que componen cada vista de la aplicación.
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import HomePage from "./components/HomePage.jsx";
@@ -44,6 +42,7 @@ const startProductsRequest = (updateProductsState) => {
     })
     .then((data) => {
       productsRequestStatus = "done";
+      // Persistimos el listado actualizado y limpiamos mensajes previos.
       updateProductsState((prev) => ({
         ...prev,
         status: "success",
@@ -54,6 +53,7 @@ const startProductsRequest = (updateProductsState) => {
     .catch((error) => {
       console.error("Error al cargar productos:", error);
       productsRequestStatus = "idle";
+      // Al fallar dejamos el estado listo para reintentar desde la UI.
       updateProductsState((prev) => ({
         ...prev,
         status: "error",
@@ -65,22 +65,29 @@ const startProductsRequest = (updateProductsState) => {
 };
 
 function App() {
+  // Vista activa (home, catálogo, detalle o contacto).
   const [currentView, setCurrentView] = useState(VIEWS.home);
+  // Estado derivado del fetch de productos.
   const [productsState, setProductsState] = useState({
     status: "loading",
     list: [],
     error: null,
   });
+  // Identificador del producto seleccionado en el detalle.
   const [selectedProductId, setSelectedProductId] = useState(null);
+  // Copia del producto seleccionada para evitar parpadeos al navegar.
   const [selectedProductData, setSelectedProductData] = useState(null);
+  // Items agregados al carrito (se agregan como copias para mostrar cantidad total).
   const [cartItems, setCartItems] = useState([]);
   // Controla el texto del buscador de catálogo.
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Cuando el estado global indica inactividad se dispara la carga inicial.
   if (productsRequestStatus === "idle") {
     startProductsRequest(setProductsState);
   }
 
+  // Derivados que simplifican el render.
   const products = productsState.list;
   const isLoading = productsState.status === "loading";
   const fetchError = productsState.error;
@@ -204,7 +211,12 @@ function App() {
       />
       <div className="page-shell">
         {currentView === VIEWS.home && (
-          <HomePage onSelectProduct={showProductDetail} />
+          <HomePage
+            onSelectProduct={showProductDetail}
+            productos={products}
+            isLoading={isLoading}
+            error={fetchError}
+          />
         )}
 
         {currentView === VIEWS.catalog && (

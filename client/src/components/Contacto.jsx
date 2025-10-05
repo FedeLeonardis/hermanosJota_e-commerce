@@ -61,7 +61,7 @@ export default function Contacto() {
       <div className="container">
         <h1>Contacto</h1>
         <p className="subtitle">
-          Nuestros clientes suelen tener preguntas. Necesitamos un formulario simple para que nos dejen sus dudas.
+          Su duda no molesta, su consulta nos importa. Complete el formulario y nos pondremos en contacto a la brevedad.
         </p>
 
         <div className={`form-container ${enviado ? "hidden" : ""}`} id="formContainer">

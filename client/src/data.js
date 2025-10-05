@@ -1,3 +1,4 @@
+// Conjunto de respaldo utilizado cuando el backend no está disponible durante el desarrollo.
 export const productos = [
   {
     id: 1,

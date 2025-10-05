@@ -1,6 +1,10 @@
 import { useState } from "react";
 import "../css/contacto.css"; 
 
+/**
+ * Formulario de contacto controlado con validaciones básicas en cliente.
+ * Maneja estados de loading y éxito para simular el envío de un mensaje.
+ */
 export default function Contacto() {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -9,19 +13,21 @@ export default function Contacto() {
   const [loading, setLoading] = useState(false);
   const [enviado, setEnviado] = useState(false);
 
+  // Reglas de validación reutilizadas para cada campo.
   const validators = {
     nombre: (v) => v.trim().length >= 2,
     email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
     mensaje: (v) => v.trim().length >= 10,
   };
 
+  // Valida un único campo y sincroniza el estado de errores.
   const validateField = (field, value) => {
     const valid = validators[field](value);
     setErrors((prev) => ({ ...prev, [field]: !valid }));
     return valid;
   };
 
-
+  // Ejecuta la validación completa previo al envío del formulario.
   const validateAll = () => {
     const res = {
       nombre: !validators.nombre(nombre),
@@ -32,6 +38,7 @@ export default function Contacto() {
     return !res.nombre && !res.email && !res.mensaje;
   };
 
+  // Simula el submit hacia un backend respetando la UX de loading y éxito.
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateAll()) return;

@@ -1,100 +1,121 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // 👈 CRUCIAL: Importar el hook
+import React, { useState } from "react";
 import "../css/header.css";
 
-const Header = () => {
-  const { cartCount, clearCart } = useCart();
-
+/**
+ * Encabezado principal con navegación básica y popup del carrito.
+ * Las acciones se delegan al componente padre mediante callbacks.
+ */
+const Header = ({
+  onNavigate = () => {},
+  activeView = "home",
+  cartCount = 0,
+  onClearCart = () => {},
+}) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const cartRef = useRef(null);
 
-  const toggleCartPopup = useCallback((open) => {
+  // Permite abrir/cerrar el popup manualmente o en modo toggle.
+  const toggleCartPopup = (open) => {
     if (typeof open === "boolean") {
       setIsPopupOpen(open);
-    } else {
-      setIsPopupOpen((prev) => !prev);
+      return;
     }
-  }, []);
+    setIsPopupOpen((prev) => !prev);
+  };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        isPopupOpen &&
-        cartRef.current &&
-        !cartRef.current.contains(event.target)
-      ) {
-        toggleCartPopup(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isPopupOpen, toggleCartPopup]);
-
+  // Vacía el carrito sin cerrar el menú abruptamente por propagación del click.
   const handleClearCart = (e) => {
     e.stopPropagation();
-    clearCart();
+    onClearCart();
     toggleCartPopup(false);
   };
 
+  // Placeholder para futura integración con checkout real.
   const handleCheckout = (e) => {
     e.stopPropagation();
     console.log("Finalizar compra - funcionalidad pendiente");
     toggleCartPopup(false);
   };
 
+  // Devuelve un handler parametrizable por vista.
+  const handleNavClick = (view) => (e) => {
+    e.preventDefault();
+    onNavigate(view);
+  };
+
+  const isActive = (view) => activeView === view;
+
   return (
-    <header className="main-header">
-      <Link to="/" className="recuadro-logo">
+    <div className="main-header-wrapper">
+      <header className="main-header">
+      <button
+        type="button"
+        className="recuadro-logo"
+        onClick={handleNavClick("home")}
+      >
         <img
           className="logo"
           src="/assets/img/logo/logo.svg"
           alt="logo Hnos Jota"
         />
-      </Link>
+      </button>
 
       <nav className="menu-navegacion">
-        <Link to="/">INICIO</Link>
-        <Link to="/productos">PRODUCTOS</Link>
-        <Link to="/contacto">CONTACTO</Link>
-
-        <div
-          ref={cartRef}
-          className={`cart ${isPopupOpen ? "open" : ""}`}
-          onClick={() => toggleCartPopup()}
+        <button
+          type="button"
+          className={isActive("home") ? "active" : ""}
+          onClick={handleNavClick("home")}
         >
-          <img
-            className="icono-carro"
-            src="/assets/img/icons/carrito.svg"
-            alt="Carrito"
-          />
-
-          <span id="cart-count">{cartCount}</span>
-
-          <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
-            <button
-              id="clear-cart"
-              type="button"
-              className="popup-btn"
-              onClick={handleClearCart}
-            >
-              Vaciar carrito
-            </button>
-            <button
-              id="checkout"
-              type="button"
-              className="popup-btn"
-              onClick={handleCheckout}
-            >
-              Finalizar compra
-            </button>
-          </div>
-        </div>
+          INICIO
+        </button>
+        <button
+          type="button"
+          className={isActive("catalog") ? "active" : ""}
+          onClick={handleNavClick("catalog")}
+        >
+          PRODUCTOS
+        </button>
+        <button
+          type="button"
+          className={isActive("contact") ? "active" : ""}
+          onClick={handleNavClick("contact")}
+        >
+          CONTACTO
+        </button>
       </nav>
-    </header>
+
+      <div
+        className={`cart ${isPopupOpen ? "open" : ""}`}
+        onClick={() => toggleCartPopup()}
+      >
+        <img
+          className="icono-carro"
+          src="/assets/img/icons/carrito.svg"
+          alt="Carrito"
+        />
+
+        <span id="cart-count">{cartCount}</span>
+
+        <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
+          <button
+            id="clear-cart"
+            type="button"
+            className="popup-btn"
+            onClick={handleClearCart}
+          >
+            Vaciar carrito
+          </button>
+          <button
+            id="checkout"
+            type="button"
+            className="popup-btn"
+            onClick={handleCheckout}
+          >
+            Finalizar compra
+          </button>
+        </div>
+      </div>
+      </header>
+    </div>
   );
 };
 

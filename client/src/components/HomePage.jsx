@@ -5,27 +5,29 @@ import "../css/variables.css";
 import "../css/global.css";
 import "../css/index.css";
 
-const HomePage = () => {
+// Página de inicio con hero principal y listado de destacados.
+const HomePage = ({ onSelectProduct }) => {
   return (
-    <main>
-      <div className="hero-banner">
-        <div className="texto-banner">
-          <h1>
-            “Cada pieza cuenta la historia de manos expertas y materiales
-            nobles”
-          </h1>
-          <p>-Hnos Jota</p>
+    <div className="page-home">
+      <section className="hero-banner" aria-label="Taller Hermanos Jota">
+        <div className="hero-banner__overlay">
+          <div className="hero-banner__quote-box">
+            <h1 className="hero-banner__quote">
+              “Cada pieza cuenta la historia de manos expertas y materiales nobles”
+            </h1>
+            <p className="hero-banner__author">— Hnos Jota</p>
+          </div>
         </div>
-      </div>
+      </section>
 
       <hr />
 
       <section className="productos-destacados">
         <h2 className="subtitulo">Productos Destacados</h2>
 
-        <FeaturedProduct />
+        <FeaturedProduct onSelectProduct={onSelectProduct} />
       </section>
-    </main>
+    </div>
   );
 };
 

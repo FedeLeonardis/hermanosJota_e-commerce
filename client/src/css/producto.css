@@ -1,3 +1,4 @@
+/* Estilos detallados para la vista de producto individual. */
 /* Variables CSS */
 :root {
   --burnt-sienna: #A0522D;
@@ -34,7 +35,7 @@ body {
 }
 
 /* Container principal */
-.container {
+.containerProd {
   max-width: var(--container);
   margin: 0 auto;
   padding: 20px;
@@ -45,14 +46,22 @@ body {
   font-size: 0.85rem;
   color: #666;
   margin: 12px 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.breadcrumbs a {
+.breadcrumb-back {
+  background: none;
+  border: none;
   color: var(--burnt-sienna);
-  text-decoration: none;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
 }
 
-.breadcrumbs a:hover {
+.breadcrumb-back:hover,
+.breadcrumb-back:focus-visible {
   text-decoration: underline;
 }
 

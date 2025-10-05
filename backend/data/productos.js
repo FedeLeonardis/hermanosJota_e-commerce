@@ -1,3 +1,7 @@
+/**
+ * Fuente de datos estática utilizada por el backend para simular un catálogo de productos.
+ * Cada elemento representa el payload completo que espera el front para renderizar la ficha.
+ */
 const productos = [
   {
     id: 1,

@@ -1,13 +1,10 @@
-// src/components/ScrollToTop.jsx
+// Componente utilitario no utilizado actualmente porque el flujo principal maneja scroll manualmente.
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 
-export default function ScrollToTop() {
-  const { pathname } = useLocation();
-
+export default function ScrollToTop({ trigger }) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [pathname]);
+  }, [trigger]);
 
   return null;
 }

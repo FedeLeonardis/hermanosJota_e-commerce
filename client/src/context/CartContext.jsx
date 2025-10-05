@@ -1,65 +1,32 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  useCallback,
-} from "react";
+/**
+ * Obtiene el conteo de productos almacenado en localStorage.
+ * Devuelve cero por defecto o cuando el entorno no dispone de `window`.
+ */
+export const readCartFromStorage = () => {
+  if (typeof window === "undefined") {
+    return 0;
+  }
 
-const getCartCount = () => {
-  const raw = localStorage.getItem("cart-count");
-  const n = parseInt(raw || "0", 10);
-  return Number.isNaN(n) ? 0 : n;
+  const raw = window.localStorage.getItem("cart-count");
+  const parsed = parseInt(raw || "0", 10);
+  return Number.isNaN(parsed) ? 0 : parsed;
 };
 
-const CartContext = createContext();
+// Persistencia defensiva: evita valores negativos o no numéricos.
+export const writeCartToStorage = (count) => {
+  if (typeof window === "undefined") {
+    return;
+  }
 
-export const CartProvider = ({ children }) => {
-  const [cartCount, setCartCountState] = useState(getCartCount);
-
-  const setCartCount = useCallback((newCount) => {
-    const c = Math.max(0, Math.floor(Number(newCount) || 0));
-    localStorage.setItem("cart-count", String(c));
-    setCartCountState(c);
-  }, []);
-
-  const addToCart = useCallback(
-    (quantity = 1) => {
-      const quantityToAdd = Math.max(0, Math.floor(Number(quantity) || 0));
-
-      const newCount = cartCount + quantityToAdd;
-
-      setCartCount(newCount);
-    },
-    [cartCount, setCartCount]
-  );
-
-  const clearCart = useCallback(() => {
-    localStorage.removeItem("cart-count");
-    setCartCount(0);
-  }, [setCartCount]);
-
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === "cart-count") {
-        setCartCountState(getCartCount());
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
-
-  return (
-    <CartContext.Provider value={{ cartCount, addToCart, clearCart }}>
-      {children}
-    </CartContext.Provider>
-  );
+  const safeValue = Math.max(0, Math.floor(Number(count) || 0));
+  window.localStorage.setItem("cart-count", String(safeValue));
 };
 
-export const useCart = () => {
-  return useContext(CartContext);
+// Elimina la clave utilizada para almacenar el conteo del carrito.
+export const clearCartStorage = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.removeItem("cart-count");
 };

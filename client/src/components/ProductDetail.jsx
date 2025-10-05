@@ -1,38 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { useCart } from "../context/CartContext";
+import React, { useState } from "react";
 import "../css/producto.css";
 
-const ProductDetail = () => {
-  const { id } = useParams();
-  const { addToCart } = useCart();
-
-  const [producto, setProducto] = useState(null);
+/**
+ * Vista de detalle para un producto específico.
+ * Controla selección de cantidad, feedback visual y agrega productos al carrito.
+ */
+const ProductDetail = ({ producto, onBack = () => {}, onAddToCart = () => {} }) => {
   const [cantidad, setCantidad] = useState(1);
   const [feedback, setFeedback] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
 
-  useEffect(() => {
-    // Cargar producto desde el backend
-    fetch(`http://localhost:5000/api/productos/${id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener producto");
-        return res.json();
-      })
-      .then((data) => {
-        setProducto(data);
-        document.title = `HJ — ${data.nombre}`;
-      })
-      .catch((err) => {
-        console.error("Error al cargar producto:", err);
-      });
-
-    setFeedback("");
-    setCantidad(1);
-  }, [id]);
-
   if (!producto) {
-    return <main className="container">Cargando detalles del producto...</main>;
+    return (
+      <div className="containerProd">
+        <p>Seleccioná un producto para ver los detalles.</p>
+      </div>
+    );
   }
 
   const { nombre, descripcion, precio, features, img } = producto;
@@ -40,19 +23,22 @@ const ProductDetail = () => {
   const subtitulo = "Madera de autor · Hecho a mano";
   const stock = 10;
 
+  // Mantiene la cantidad dentro del rango permitido por la UX.
   const handleCantidadChange = (e) => {
     const nuevaCantidad = Math.min(Math.max(1, parseInt(e.target.value)), 10);
     setCantidad(nuevaCantidad);
   };
 
+  // Agrega al carrito y dispara animaciones transitorias.
   const handleAgregarCarrito = () => {
-    addToCart(cantidad);
+    onAddToCart(producto, cantidad);
     setFeedback("Agregado ✔");
     setIsAnimating(true);
     setTimeout(() => setFeedback(""), 2000);
     setTimeout(() => setIsAnimating(false), 150);
   };
 
+  // Al mostrar feedback se realza la etiqueta de stock brevemente.
   const feedbackStyle = feedback
     ? {
         backgroundColor: "var(--sage-green)",
@@ -62,10 +48,11 @@ const ProductDetail = () => {
     : {};
 
   return (
-    <main className="container">
+    <div className="containerProd">
       <nav className="breadcrumbs" aria-label="migas">
-        <Link to="/">Inicio</Link> · <Link to="/productos">Catálogo</Link> ·
-        <span id="bcProducto">{titulo}</span>
+        <button type="button" onClick={onBack} className="breadcrumb-back">
+          ← Volver al catálogo
+        </button>
       </nav>
 
       <article className="product">
@@ -153,7 +140,7 @@ const ProductDetail = () => {
           </div>
         </aside>
       </article>
-    </main>
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ import "../css/variables.css";
 import "../css/global.css";
 import "../css/index.css";
 
+// Pie de página con información de contacto y horarios del showroom.
 const Footer = () => {
   return (
     <footer className="env-footer">

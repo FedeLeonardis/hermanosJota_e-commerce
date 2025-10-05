@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import "../css/reset.css";
 import "../css/productos.css";
@@ -6,75 +5,70 @@ import "../css/variables.css";
 import "../css/global.css";
 import "../css/index.css";
 
-function Catalogo() {
-  const [productos, setProductos] = useState([]); // estado para guardar productos
-  const url = "http://localhost:5000/api/productos";
+/**
+ * Renderiza la grilla de productos del catálogo.
+ * Recibe un listado filtrado y delega la selección individual a `ProductCard`.
+ */
+function Catalogo({
+  productos = [],
+  isLoading,
+  error,
+  onSelectProduct = () => {},
+  searchQuery = "",
+  onSearchChange = () => {},
+}) {
+  if (isLoading) {
+    return <div className="state-message">Cargando...</div>;
+  }
 
-  useEffect(() => {
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Productos desde backend:", data);
-        setProductos(data); // guardamos los productos en el state
-      })
-      .catch((err) => console.error("Error al traer productos:", err));
-  }, []);
+  if (error) {
+    return <div className="state-message state-error">{error}</div>;
+  }
+
+  // Determina si mostrar mensajes de búsqueda vacía o sin resultados.
+  const trimmedQuery = searchQuery.trim();
+  const hasResults = productos.length > 0;
 
   return (
-    <>
-      <h1>NUESTROS PRODUCTOS</h1>
+    <section className="catalogo-page">
+      <header className="catalogo-page__header">
+        <p className="catalogo-page__eyebrow">Colección permanente</p>
+        <h1 className="catalogo-page__title">Nuestros productos</h1>
+      </header>
+      <div className="catalogo-page__search" role="search">
+        <label className="catalogo-page__search-label" htmlFor="catalog-search">
+          Buscar por nombre
+        </label>
+        <input
+          id="catalog-search"
+          type="search"
+          className="catalogo-page__search-input"
+          placeholder="Ej: sofá, mesa, silla"
+          value={searchQuery}
+          onChange={(event) => onSearchChange(event.target.value)}
+        />
+      </div>
       <div className="catalogo grid-container">
+        {!hasResults && !trimmedQuery && (
+          <p className="state-message">No hay productos disponibles por ahora.</p>
+        )}
+
+        {!hasResults && trimmedQuery && (
+          <p className="state-message">
+            No encontramos coincidencias para "{trimmedQuery}".
+          </p>
+        )}
+
         {productos.map((producto) => (
           <ProductCard
-            className="card-producto link-producto btn-detalles"
             key={producto.id}
             producto={producto}
+            onSelect={onSelectProduct}
           />
         ))}
       </div>
-    </>
+    </section>
   );
 }
 
 export default Catalogo;
-
-// import ProductCard from "./ProductCard";
-// // import { productos } from "../data.js";
-// import "../css/reset.css";
-// import "../css/productos.css";
-// import "../css/variables.css";
-// import "../css/global.css";
-// import "../css/index.css";
-// // import productos from "../../../backend/data/productos";
-
-// function Catalogo() {
-//   const url = "http://localhost:5000";
-//   const res = fetch(url + "/api/productos", {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   res.json(productos);
-//   return (
-//     <>
-//       <h1>NUESTROS PRODUCTOS</h1>
-//       <div className="catalogo grid-container">
-//         {productos.map((producto) => (
-//           <ProductCard
-//             className="card-producto link-producto.btn-detalles"
-//             key={producto.id}
-//             producto={producto}
-//           />
-//         ))}
-//       </div>
-//     </>
-//   );
-// }
-
-// export default Catalogo;

@@ -131,7 +131,7 @@ function App() {
     setSelectedProductData(null);
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      document.title = "HJ";
+      document.title = "HJ - Catálogo";
     }
   };
 

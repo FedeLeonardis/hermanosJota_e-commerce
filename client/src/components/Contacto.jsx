@@ -43,6 +43,12 @@ export default function Contacto() {
     e.preventDefault();
     if (!validateAll()) return;
 
+    console.log("Formulario de contacto enviado", {
+      nombre,
+      email,
+      mensaje,
+    });
+
     setLoading(true);
     try {
       await new Promise((r) => setTimeout(r, 1500)); // simula envío

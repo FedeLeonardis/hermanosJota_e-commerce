@@ -15,7 +15,7 @@ productosRouter.get("/:id", (req, res) => {
   const id = parseInt(req.params.id, 10);
   const producto = productos.find((p) => p.id === id);
   if (!producto) {
-    return res.status(400).json({ message: "Producto no encontrado." });
+    return res.status(404).json({ message: "Producto no encontrado." });
   }
 
   res.json(producto);

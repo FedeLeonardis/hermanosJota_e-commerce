@@ -131,7 +131,7 @@ function App() {
     setSelectedProductData(null);
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      document.title = "HJ - Catálogo";
+      document.title = "Hermanos Jota";
     }
   };
 
@@ -173,7 +173,7 @@ function App() {
         setSearchQuery("");
       }
       if (typeof document !== "undefined") {
-        document.title = "HJ";
+        document.title = "Hermanos Jota";
       }
     }
   };

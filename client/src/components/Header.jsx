@@ -47,73 +47,73 @@ const Header = ({
   return (
     <div className="main-header-wrapper">
       <header className="main-header">
-      <button
-        type="button"
-        className="recuadro-logo"
-        onClick={handleNavClick("home")}
-      >
-        <img
-          className="logo"
-          src="/assets/img/logo/logo.svg"
-          alt="logo Hnos Jota"
-        />
-      </button>
-
-      <nav className="menu-navegacion">
         <button
           type="button"
-          className={isActive("home") ? "active" : ""}
+          className="recuadro-logo"
           onClick={handleNavClick("home")}
         >
-          INICIO
+          <img
+            className="logo"
+            src="/assets/img/logo/logo.svg"
+            alt="logo Hnos Jota"
+          />
         </button>
-        <button
-          type="button"
-          className={isActive("catalog") ? "active" : ""}
-          onClick={handleNavClick("catalog")}
-        >
-          PRODUCTOS
-        </button>
-        <button
-          type="button"
-          className={isActive("contact") ? "active" : ""}
-          onClick={handleNavClick("contact")}
-        >
-          CONTACTO
-        </button>
-      </nav>
 
-      <div
-        className={`cart ${isPopupOpen ? "open" : ""}`}
-        onClick={() => toggleCartPopup()}
-      >
-        <img
-          className="icono-carro"
-          src="/assets/img/icons/carrito.svg"
-          alt="Carrito"
-        />
-
-        <span id="cart-count">{cartCount}</span>
-
-        <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
+        <nav className="menu-navegacion">
           <button
-            id="clear-cart"
             type="button"
-            className="popup-btn"
-            onClick={handleClearCart}
+            className={isActive("home") ? "active" : ""}
+            onClick={handleNavClick("home")}
           >
-            Vaciar carrito
+            INICIO
           </button>
           <button
-            id="checkout"
             type="button"
-            className="popup-btn"
-            onClick={handleCheckout}
+            className={isActive("catalog") ? "active" : ""}
+            onClick={handleNavClick("catalog")}
           >
-            Finalizar compra
+            PRODUCTOS
           </button>
+          <button
+            type="button"
+            className={isActive("contact") ? "active" : ""}
+            onClick={handleNavClick("contact")}
+          >
+            CONTACTO
+          </button>
+        </nav>
+
+        <div
+          className={`cart ${isPopupOpen ? "open" : ""}`}
+          onClick={() => toggleCartPopup()}
+        >
+          <img
+            className="icono-carro"
+            src="/assets/img/icons/carrito.svg"
+            alt="Carrito"
+          />
+
+          <span id="cart-count">{cartCount}</span>
+
+          <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
+            <button
+              id="clear-cart"
+              type="button"
+              className="popup-btn"
+              onClick={handleClearCart}
+            >
+              Vaciar carrito
+            </button>
+            <button
+              id="checkout"
+              type="button"
+              className="popup-btn"
+              onClick={handleCheckout}
+            >
+              Finalizar compra
+            </button>
+          </div>
         </div>
-      </div>
       </header>
     </div>
   );

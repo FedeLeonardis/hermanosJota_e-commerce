@@ -28,30 +28,23 @@ const Footer = () => {
 
       <div className="contacto-digital">
         <h3 className="destacado">Contacto Digital 📱</h3>
-        <ul>
-          <li>
-            <a
-              className="link-web"
-              href="index.html"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Sitio Web: www.hermanosjota.com.ar
-            </a>
-          </li>
-          <li>
-            <p className="datos">Email General: info@hermanosjota.com.ar</p>
-          </li>
-          <li>
-            <p className="datos">Ventas: ventas@hermanosjota.com.ar</p>
-          </li>
-          <li>
-            <p className="datos">Instagram: @hermanosjota_ba</p>
-          </li>
-          <li>
-            <p className="datos">WhatsApp: +54 11 4567-8900</p>
-          </li>
-        </ul>
+
+        <a
+          className="link-web"
+          href="index.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Sitio Web: www.hermanosjota.com.ar
+        </a>
+
+        <p className="datos">Email General: info@hermanosjota.com.ar</p>
+
+        <p className="datos">Ventas: ventas@hermanosjota.com.ar</p>
+
+        <p className="datos">Instagram: @hermanosjota_ba</p>
+
+        <p className="datos">WhatsApp: +54 11 4567-8900</p>
       </div>
     </footer>
   );

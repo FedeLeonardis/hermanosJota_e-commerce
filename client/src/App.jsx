@@ -1,4 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+// 🛠️ Importamos useParams de React Router para obtener el ID de la URL
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 
 // Componentes de alto nivel que componen cada vista de la aplicación.
 import Header from "./components/Header.jsx";
@@ -8,92 +17,123 @@ import Catalogo from "./components/Catalogo.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
 import Contacto from "./components/Contacto.jsx";
 
-// Diccionario centralizado para controlar las vistas disponibles en la aplicación.
-const VIEWS = {
-  home: "home",
-  catalog: "catalog",
-  detail: "detail",
-  contact: "contact",
-};
-
 // Endpoint base del backend que expone el catálogo.
 const PRODUCTS_URL = "http://localhost:5000/api/productos";
 
-// Estado compartido entre renders para evitar múltiples llamadas simultáneas a la API.
-let productsRequestStatus = "idle";
-
 /**
- * Lanza una carga de productos y sincroniza el estado externo cuando la promesa resuelve.
- * Se extrae para poder reutilizarlo desde distintos puntos sin duplicar la lógica de fetch.
+ * Función para cargar productos. Usa el estado de React internamente.
  */
-const startProductsRequest = (updateProductsState) => {
-  if (productsRequestStatus === "loading") {
+const fetchProducts = async (setProductsState, productsRequestStatus) => {
+  if (productsRequestStatus.current === "loading") {
     return;
   }
 
-  productsRequestStatus = "loading";
+  productsRequestStatus.current = "loading";
 
-  fetch(PRODUCTS_URL)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Error ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      productsRequestStatus = "done";
-      // Persistimos el listado actualizado y limpiamos mensajes previos.
-      updateProductsState((prev) => ({
-        ...prev,
-        status: "success",
-        list: Array.isArray(data) ? data : [],
-        error: null,
-      }));
-    })
-    .catch((error) => {
-      console.error("Error al cargar productos:", error);
-      productsRequestStatus = "idle";
-      // Al fallar dejamos el estado listo para reintentar desde la UI.
-      updateProductsState((prev) => ({
-        ...prev,
-        status: "error",
-        list: [],
-        error:
-          "Error al cargar los productos. Intenta nuevamente en unos minutos.",
-      }));
-    });
+  setProductsState((prev) => ({
+    ...prev,
+    status: "loading",
+    error: null,
+  }));
+
+  try {
+    const response = await fetch(PRODUCTS_URL);
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}`);
+    }
+    const data = await response.json();
+
+    productsRequestStatus.current = "done";
+    setProductsState((prev) => ({
+      ...prev,
+      status: "success",
+      list: Array.isArray(data) ? data : [],
+      error: null,
+    }));
+  } catch (error) {
+    console.error("Error al cargar productos:", error);
+    productsRequestStatus.current = "idle";
+    setProductsState((prev) => ({
+      ...prev,
+      status: "error",
+      list: [],
+      error:
+        "Error al cargar los productos. Intenta nuevamente en unos minutos.",
+    }));
+  }
+};
+
+/**
+ * Crea un slug (URL amigable) a partir de una cadena de texto.
+ * Ejemplo: "Mesa de Roble y Metal" -> "mesa-de-roble-y-metal"
+ */
+const createSlug = (name) => {
+  if (!name) return "";
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Quitar acentos
+    .replace(/[^a-z0-9\s-]/g, "") // Quitar caracteres especiales
+    .trim()
+    .replace(/\s+/g, "-"); // Reemplazar espacios por guiones
 };
 
 function App() {
-  // Vista activa (home, catálogo, detalle o contacto).
-  const [currentView, setCurrentView] = useState(VIEWS.home);
   // Estado derivado del fetch de productos.
   const [productsState, setProductsState] = useState({
-    status: "loading",
+    status: "idle",
     list: [],
     error: null,
   });
-  // Identificador del producto seleccionado en el detalle.
-  const [selectedProductId, setSelectedProductId] = useState(null);
-  // Copia del producto seleccionada para evitar parpadeos al navegar.
-  const [selectedProductData, setSelectedProductData] = useState(null);
-  // Items agregados al carrito (se agregan como copias para mostrar cantidad total).
-  const [cartItems, setCartItems] = useState([]);
   // Controla el texto del buscador de catálogo.
   const [searchQuery, setSearchQuery] = useState("");
+  // Items agregados al carrito.
+  const [cartItems, setCartItems] = useState([]);
 
-  // Cuando el estado global indica inactividad se dispara la carga inicial.
-  if (productsRequestStatus === "idle") {
-    startProductsRequest(setProductsState);
-  }
+  // Usamos useRef para mantener el estado de la request sin re-renderizar
+  const productsRequestStatus = useRef("idle");
 
-  // Derivados que simplifican el render.
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // ------------------------------------------------------------------
+  // 🔄 useEffects para Carga y Side Effects (Scroll/Título/Buscador)
+  // ------------------------------------------------------------------
+
+  // 1. Carga inicial de productos
+  useEffect(() => {
+    if (productsRequestStatus.current === "idle") {
+      fetchProducts(setProductsState, productsRequestStatus);
+    }
+  }, []);
+
+  // 2. Control de scroll y título/buscador al cambiar de ruta
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      // Limpiamos el título base
+      if (!location.pathname.startsWith("/productos/")) {
+        document.title = "Hermanos Jota";
+      }
+
+      // Limpiamos el buscador si navegamos fuera del catálogo
+      if (!location.pathname.startsWith("/productos")) {
+        setSearchQuery("");
+      }
+    }
+  }, [location.pathname]);
+
+  // ------------------------------------------------------------------
+  // Derivados de estado
+  // ------------------------------------------------------------------
   const products = productsState.list;
-  const isLoading = productsState.status === "loading";
+  const isLoading =
+    productsState.status === "loading" || productsState.status === "idle";
   const fetchError = productsState.error;
   const cartCount = cartItems.length;
 
-  // Filtrado por nombre según el texto de búsqueda actual.
+  // Filtrado por nombre (se mantiene)
   const normalizedSearch = searchQuery.trim().toLowerCase();
   const filteredProducts = normalizedSearch
     ? products.filter((producto) =>
@@ -101,87 +141,55 @@ function App() {
       )
     : products;
 
-  // Si existe un id seleccionado buscamos la entidad en el listado actual,
-  // en caso contrario usamos la copia almacenada durante la navegación.
-  const selectedProduct = selectedProductId
-    ? products.find((producto) => producto.id === selectedProductId) ||
-      selectedProductData
-    : null;
+  // ------------------------------------------------------------------
+  // 🗺️ Funciones de Navegación (usan useNavigate)
+  // ------------------------------------------------------------------
 
-  /**
-   * Navega al detalle del producto guardando una copia local para evitar parpadeos.
-   * También actualiza título y posición del scroll para mejor UX.
-   */
-  const showProductDetail = (producto) => {
-    if (!producto) return;
-
-    setSelectedProductId(producto.id);
-    setSelectedProductData(producto);
-    setCurrentView(VIEWS.detail);
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      document.title = `HJ — ${producto.nombre}`;
-    }
-  };
-
-  // Restablece el estado al listado y limpia la selección previa.
-  const handleBackToCatalog = () => {
-    setCurrentView(VIEWS.catalog);
-    setSelectedProductId(null);
-    setSelectedProductData(null);
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      document.title = "Hermanos Jota";
-    }
-  };
-
-  /**
-   * Cambia la vista actual y dispara la carga de productos si corresponde.
-   * Se usa tanto desde el header como desde botones internos.
-   */
+  // Navegación principal del Header
   const handleNavigate = (view) => {
-    if (view === VIEWS.catalog && productsRequestStatus === "idle") {
-      setProductsState((prev) => ({
-        ...prev,
-        status: "loading",
-        error: null,
-      }));
-      startProductsRequest(setProductsState);
-    }
-
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
+    let path;
     switch (view) {
-      case VIEWS.catalog:
-        setCurrentView(VIEWS.catalog);
+      case "catalog":
+        path = "/productos";
         break;
-      case VIEWS.contact:
-        setCurrentView(VIEWS.contact);
+      case "contact":
+        path = "/contacto";
         break;
       default:
-        setCurrentView(VIEWS.home);
+        path = "/";
         break;
     }
-
-    if (view !== VIEWS.detail) {
-      setSelectedProductId(null);
-      setSelectedProductData(null);
-      if (view !== VIEWS.catalog) {
-        // Limpiamos el buscador al navegar fuera del catálogo.
-        setSearchQuery("");
-      }
-      if (typeof document !== "undefined") {
-        document.title = "Hermanos Jota";
-      }
-    }
+    navigate(path);
   };
 
   /**
-   * Agrega un producto al carrito replicándolo tantas veces como indique quantity.
-   * El array resultante sirve para mostrar conteos individuales sin lógica adicional.
+   * 🗺️ Navega al detalle del producto.
+   * Usa el nombre del producto para generar el SLUG y la URL.
    */
+  const showProductDetail = (producto) => {
+    if (!producto || !producto.nombre) return;
+
+    const slug = createSlug(producto.nombre); // Generamos el slug
+
+    // Actualizamos el título inmediatamente
+    if (typeof document !== "undefined") {
+      document.title = `HJ — ${producto.nombre}`;
+    }
+    // Navegamos usando el slug
+    navigate(`/productos/${slug}`);
+  };
+
+  /**
+   * 🗺️ Vuelve a la vista de catálogo.
+   */
+  const handleBackToCatalog = () => {
+    navigate("/productos");
+  };
+
+  // ------------------------------------------------------------------
+  // Lógica del Carrito (Se mantiene)
+  // ------------------------------------------------------------------
+
   const handleAddToCart = (producto, quantity = 1) => {
     if (!producto) {
       return;
@@ -196,58 +204,119 @@ function App() {
     setCartItems((prev) => [...prev, ...newEntries]);
   };
 
-  // Limpia el carrito actual. Se expone al header para resetear la visualización.
   const handleClearCart = () => {
     setCartItems([]);
   };
+
+  // ------------------------------------------------------------------
+  // 🌟 Componente Wrapper para Detalle (Usa useParams) 🌟
+  // ------------------------------------------------------------------
+
+  /**
+   * Wrapper que extrae el SLUG de la URL, busca el producto y gestiona el estado de carga.
+   */
+  const ProductDetailWrapper = () => {
+    // ⬇️ Hook para obtener el parámetro dinámico 'slug' de la URL: /productos/:slug
+    const { slug } = useParams();
+
+    // Buscamos el producto comparando el slug de la URL con el slug generado dinámicamente
+    const selectedProduct = products.find(
+      (producto) => createSlug(producto.nombre) === slug
+    );
+
+    if (isLoading) {
+      return (
+        <div className="state-message">Cargando productos y detalles...</div>
+      );
+    }
+
+    if (fetchError) {
+      return (
+        <div className="state-message state-error">
+          Error al cargar datos: {fetchError}
+        </div>
+      );
+    }
+
+    if (!selectedProduct) {
+      // Si no está cargando y no se encontró el producto, muestra error.
+      return (
+        <div className="state-message">Producto "{slug}" no disponible.</div>
+      );
+    }
+
+    // Si se encuentra el producto, renderizamos el detalle
+    return (
+      <ProductDetail
+        key={selectedProduct.id}
+        producto={selectedProduct}
+        onBack={handleBackToCatalog}
+        onAddToCart={handleAddToCart}
+      />
+    );
+  };
+
+  // ------------------------------------------------------------------
+  // 🖼️ Renderizado Principal con React Router
+  // ------------------------------------------------------------------
 
   return (
     <>
       <Header
         onNavigate={handleNavigate}
-        activeView={currentView}
+        // Determinamos la vista activa por la ruta
+        activeView={
+          location.pathname === "/"
+            ? "home"
+            : location.pathname === "/contacto"
+            ? "contact"
+            : location.pathname.startsWith("/productos")
+            ? "catalog"
+            : ""
+        }
         cartCount={cartCount}
         onClearCart={handleClearCart}
       />
       <div className="page-shell">
-        {currentView === VIEWS.home && (
-          <HomePage
-            onSelectProduct={showProductDetail}
-            productos={products}
-            isLoading={isLoading}
-            error={fetchError}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                onSelectProduct={showProductDetail}
+                productos={products}
+                isLoading={isLoading}
+                error={fetchError}
+              />
+            }
           />
-        )}
 
-        {currentView === VIEWS.catalog && (
-          <Catalogo
-            productos={filteredProducts}
-            isLoading={isLoading}
-            error={fetchError}
-            onSelectProduct={showProductDetail}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+          <Route
+            path="/productos"
+            element={
+              <Catalogo
+                productos={filteredProducts}
+                isLoading={isLoading}
+                error={fetchError}
+                onSelectProduct={showProductDetail}
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+              />
+            }
           />
-        )}
 
-        {currentView === VIEWS.detail && selectedProduct && (
-          <ProductDetail
-            key={selectedProduct.id}
-            producto={selectedProduct}
-            onBack={handleBackToCatalog}
-            onAddToCart={handleAddToCart}
+          {/* RUTA DE DETALLE: Espera un slug en lugar de un ID */}
+          <Route path="/productos/:slug" element={<ProductDetailWrapper />} />
+
+          <Route path="/contacto" element={<Contacto />} />
+
+          <Route
+            path="*"
+            element={
+              <div className="state-message">404 | Página no encontrada.</div>
+            }
           />
-        )}
-
-        {currentView === VIEWS.detail && !selectedProduct && isLoading && (
-          <div className="state-message">Cargando detalles del producto...</div>
-        )}
-
-        {currentView === VIEWS.contact && <Contacto />}
-
-        {currentView === VIEWS.detail && !selectedProduct && !isLoading && (
-          <div className="state-message">Producto no disponible.</div>
-        )}
+        </Routes>
       </div>
 
       <Footer />
@@ -255,4 +324,8 @@ function App() {
   );
 }
 
+/**
+ * Exportamos el componente App directamente,
+ * ya que el entorno Canvas proporciona el Router.
+ */
 export default App;

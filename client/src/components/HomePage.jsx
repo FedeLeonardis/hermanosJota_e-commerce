@@ -20,7 +20,8 @@ const HomePage = ({
         <div className="hero-banner__overlay">
           <div className="hero-banner__quote-box">
             <h1 className="hero-banner__quote">
-              “Cada pieza cuenta la historia de manos expertas y materiales nobles”
+              “Cada pieza cuenta la historia de manos expertas y materiales
+              nobles”
             </h1>
             <p className="hero-banner__author">— Hnos Jota</p>
           </div>

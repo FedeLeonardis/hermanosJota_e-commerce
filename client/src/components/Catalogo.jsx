@@ -50,7 +50,9 @@ function Catalogo({
       </div>
       <div className="catalogo grid-container">
         {!hasResults && !trimmedQuery && (
-          <p className="state-message">No hay productos disponibles por ahora.</p>
+          <p className="state-message">
+            No hay productos disponibles por ahora.
+          </p>
         )}
 
         {!hasResults && trimmedQuery && (
@@ -63,7 +65,7 @@ function Catalogo({
           <ProductCard
             key={producto.id}
             producto={producto}
-            onSelect={onSelectProduct}
+            onSelect={onSelectProduct} // ✅ Esto ya estaba correcto
           />
         ))}
       </div>

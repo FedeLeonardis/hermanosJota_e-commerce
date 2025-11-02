@@ -1,15 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const mongoose = require("mongoose");
 
-//Cadena de conexión de la BD
-const DB_URI =
-  "mongodb+srv://walteramacademico_db_user:conectdatabase@cluster0.5alf9lx.mongodb.net/HermanosJotaDB?retryWrites=true&w=majority&appName=Cluster0";
-
 //Conexion de la BD
 mongoose
-  .connect(DB_URI)
+  .connect(process.env.DB_URI)
   .then(() => console.log("Conexion a la BD exitosa"))
   .catch(() => console.log("Error al conectar la BD"));
 
@@ -25,6 +22,7 @@ const puerto = process.env.PORT || 5000;
 
 //Permite servir las imagenes de los productos desde backend (si tienen dudas preguntar a Walter)
 const app = express();
+
 app.use(
   "/images/productos",
   express.static(path.join(__dirname, "images", "productos"))

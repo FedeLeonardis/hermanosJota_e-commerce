@@ -12,10 +12,12 @@ import {
 // Componentes de alto nivel que componen cada vista de la aplicación.
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
-import HomePage from "./components/HomePage.jsx";
-import Catalogo from "./components/Catalogo.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
-import Contacto from "./components/Contacto.jsx";
+// import Contacto from "./components/Contacto.jsx";
+import Contacto from "./pages/Contacto.jsx";
+import HomePage from "./pages/HomePage.jsx";
+// import Catalogo from "./components/Catalogo.jsx";
+import Catalogo from "./pages/Catalogo.jsx";
 
 // Endpoint base del backend que expone el catálogo.
 const PRODUCTS_URL = "http://localhost:5000/api/productos";

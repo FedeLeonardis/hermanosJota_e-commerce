@@ -1,5 +1,5 @@
 import React from "react";
-import FeaturedProduct from "./FeaturedProduct.jsx";
+import FeaturedProduct from "../components/FeaturedProduct.jsx";
 
 import "../css/reset.css";
 import "../css/variables.css";

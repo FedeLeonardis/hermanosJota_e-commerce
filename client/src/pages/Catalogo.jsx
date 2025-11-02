@@ -1,8 +1,8 @@
-import ProductCard from "./ProductCard";
+import ProductCard from "../components/ProductCard";
 import "../css/reset.css";
 import "../css/productos.css";
 import "../css/variables.css";
-import "../css/global.css";
+import "../css//global.css";
 import "../css/index.css";
 
 /**

@@ -5,7 +5,11 @@ import "../css/producto.css";
  * Vista de detalle para un producto específico.
  * Controla selección de cantidad, feedback visual y agrega productos al carrito.
  */
-const ProductDetail = ({ producto, onBack = () => {}, onAddToCart = () => {} }) => {
+const ProductDetail = ({
+  producto,
+  onBack = () => {},
+  onAddToCart = () => {},
+}) => {
   const [cantidad, setCantidad] = useState(1);
   const [feedback, setFeedback] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
@@ -18,7 +22,7 @@ const ProductDetail = ({ producto, onBack = () => {}, onAddToCart = () => {} }) 
     );
   }
 
-  const { nombre, descripcion, precio, features, img } = producto;
+  const { nombre, descripcion, precio, features, imagenUrl } = producto;
   const titulo = nombre;
   const subtitulo = "Madera de autor · Hecho a mano";
   const stock = 10;
@@ -61,7 +65,7 @@ const ProductDetail = ({ producto, onBack = () => {}, onAddToCart = () => {} }) 
             <img
               id="imgPrincipal"
               className="gallery-media"
-              src={img}
+              src={imagenUrl}
               alt={titulo}
               loading="lazy"
             />

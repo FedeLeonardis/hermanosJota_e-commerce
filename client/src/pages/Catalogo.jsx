@@ -29,6 +29,8 @@ function Catalogo({
   const trimmedQuery = searchQuery.trim();
   const hasResults = productos.length > 0;
 
+  console.log(productos);
+
   return (
     <section className="catalogo-page">
       <header className="catalogo-page__header">
@@ -63,7 +65,7 @@ function Catalogo({
 
         {productos.map((producto) => (
           <ProductCard
-            key={producto.id}
+            key={producto._id}
             producto={producto}
             onSelect={onSelectProduct} // ✅ Esto ya estaba correcto
           />

@@ -29,7 +29,11 @@ function ProductCard({ producto, onSelect = () => {} }) {
         }
       }}
     >
-      <img className="img-producto" src={producto.img} alt={producto.nombre} />
+      <img
+        className="img-producto"
+        src={producto.imagenUrl}
+        alt={producto.nombre}
+      />
       <h2 className="nombre-producto">{producto.nombre}</h2>
       <h3 className="precio-producto">
         ${producto.precio.toLocaleString("es-AR")}

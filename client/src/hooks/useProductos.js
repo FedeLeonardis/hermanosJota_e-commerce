@@ -14,10 +14,10 @@ const useProductos = (searchQuery) => {
 
       try {
         // 🚨 AQUÍ se usa tu URL del backend 🚨
-        const BASE_URL = "http://localhost:5000/api/productos";
+        const BASE_URL = "api/productos";
 
         // Construye la URL completa con el parámetro de búsqueda (query string)
-        // Ejemplo: http://localhost:5000/api/productos?q=silla
+        // Ejemplo: api/productos?q=silla
         const url = `${BASE_URL}?q=${encodeURIComponent(searchQuery)}`;
 
         const response = await fetch(url);

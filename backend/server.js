@@ -29,7 +29,6 @@ app.use(
 );
 
 // Middlewares globales: CORS, parsing de JSON y logging básico.
-app.use(cors());
 app.use(express.json());
 app.use(loggerMiddleware);
 

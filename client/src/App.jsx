@@ -20,7 +20,7 @@ import HomePage from "./pages/HomePage.jsx";
 import Catalogo from "./pages/Catalogo.jsx";
 
 // Endpoint base del backend que expone el catálogo.
-const PRODUCTS_URL = "http://localhost:5000/api/productos";
+const PRODUCTS_URL = "api/productos";
 
 /**
  * Función para cargar productos. Usa el estado de React internamente.

@@ -1,112 +1,388 @@
 # Mueblería Hermanos Jota
 
-Proyecto full-stack que recrea el e-commerce de una mueblería. La solución consta de un backend en Express que expone el catálogo de productos y un frontend en React + Vite que ofrece navegación multipágina (home, catálogo, detalle y contacto), buscador, carrito visual y componentes destacados.
+Proyecto full-stack de e-commerce para una mueblería. La solución consta de un backend en Express con MongoDB que gestiona el catálogo de productos, y un frontend en React + Vite que ofrece navegación multipágina (home, catálogo, detalle de producto, contacto y administración), buscador en tiempo real, carrito de compras visual y sistema CRUD completo de productos con características opcionales.
 
-## Integrantes del equipo
+## Integrantes actuales del equipo
 
 - Walter Arias Molino
 - Tomás Sebastián Picco
-- Malena Zoe Blanco Di Beco
 - Federico Leonardis Ayala
+
+#### Devs que pasaron por aqui: 
+- Malena Zoe Blanco Di Beco
 
 ## Características principales
 
-- Listado completo del catálogo con búsqueda por nombre y secciones destacadas.
-- Contador de carrito ubicado en el header y opción de vaciar la selección.
-- Formulario de contacto estático listo para integrarse con un backend real.
-- Backend Express con dos endpoints y manejo básico de errores/logs.
+### Frontend
+- **Navegación multipágina** con React Router (home, catálogo, detalle, contacto, admin)
+- **Listado completo del catálogo** con búsqueda en tiempo real por nombre
+- **Páginas de detalle dinámicas** que obtienen productos individuales desde la API
+- **Carrito de compras** con contador visual en el header y opción de vaciar
+- **Sistema de administración** para crear, ver y eliminar productos
+- **Formulario de creación de productos** con features opcionales y dinámicas
+- **Modal de confirmación** para acciones destructivas (eliminar productos)
+- **Responsive design** con CSS modular organizado por secciones
+- **Optimistic updates** para mejorar la experiencia de usuario
+
+### Backend
+- **API RESTful** con Express y MongoDB/Mongoose
+- **CRUD completo** de productos (Create, Read, Update, Delete)
+- **Modelo de datos flexible** con features opcionales (medidas, materiales, acabado, etc.)
+- **Middleware de logging** personalizado para tracking de requests
+- **CORS configurado** para desarrollo local y producción
+- **Manejo centralizado de errores** con respuestas HTTP apropiadas
+- **Variables de entorno** para configuración segura
 
 ## Tecnologías
 
-- **Frontend:** React 19, Vite, CSS modular organizado por secciones.
-- **Backend:** Node.js 18, Express 5, middleware personalizado de logging y CORS habilitado.
-- **Herramientas:** npm, nodemon para desarrollo, Vite preview para simulación productiva.
+### Frontend
+- **React 19** - Librería de UI con hooks modernos
+- **React Router 7** - Navegación y rutas dinámicas
+- **Vite** - Build tool y dev server de alta velocidad
+- **CSS Modular** - Estilos organizados por componentes y páginas
+- **Fetch API** - Comunicación con el backend
+
+### Backend
+- **Node.js 18+** - Runtime de JavaScript
+- **Express 5** - Framework web minimalista
+- **MongoDB** - Base de datos NoSQL
+- **Mongoose** - ODM para MongoDB
+- **dotenv** - Gestión de variables de entorno
+- **nodemon** - Recarga automática en desarrollo
+- **CORS** - Middleware para cross-origin requests
 
 ## Estructura de carpetas
 
 ```
 hermanosJota_e-commerce/
 ├── backend/
-│   ├── data/productos.js
-│   ├── middleware/logger.js
-│   ├── routes/productosRoutes.js
-│   └── server.js
+│   ├── src/
+│   │   ├── middleware/
+│   │   │   └── logger.js           # Logging de requests HTTP
+│   │   ├── models/
+│   │   │   └── Product.js          # Modelo Mongoose de productos
+│   │   └── routes/
+│   │       └── productosRoutes.js  # Rutas de la API de productos
+│   ├── data/
+│   │   └── productos.js            # Datos de ejemplo (legacy)
+│   ├── images/
+│   │   └── productos/              # Imágenes de productos
+│   ├── .env                        # Variables de entorno (no versionado)
+│   ├── .env.example                # Plantilla de variables de entorno
+│   ├── server.js                   # Punto de entrada del servidor
+│   └── package.json
+│
 ├── client/
 │   ├── src/
-│   │   ├── components/*.jsx
-│   │   ├── css/*.css
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   └── public/assets/...
-└── README.md
+│   │   ├── components/
+│   │   │   ├── FeaturedProduct.jsx # Productos destacados en home
+│   │   │   ├── Footer.jsx          # Footer del sitio
+│   │   │   ├── Header.jsx          # Header con navegación y carrito
+│   │   │   ├── ProductCard.jsx     # Tarjeta de producto en catálogo
+│   │   │   ├── ProductDetail.jsx   # Vista detallada de producto
+│   │   │   └── ProductosPage.jsx   # Página de catálogo
+│   │   ├── pages/
+│   │   │   ├── Catalogo.jsx        # Página del catálogo
+│   │   │   ├── Contacto.jsx        # Formulario de contacto
+│   │   │   ├── FormProductoNuevo.jsx # Formulario de creación de productos
+│   │   │   └── HomePage.jsx        # Página de inicio
+│   │   ├── hooks/
+│   │   │   └── useProductos.js     # Hook personalizado (legacy)
+│   │   ├── config/
+│   │   │   └── api.js              # Configuración de URLs de API
+│   │   ├── css/
+│   │   │   ├── variables.css       # Variables CSS globales
+│   │   │   ├── reset.css           # Reset de estilos
+│   │   │   ├── global.css          # Estilos globales
+│   │   │   ├── header.css          # Estilos del header
+│   │   │   ├── footer.css          # Estilos del footer
+│   │   │   ├── index.css           # Estilos de home
+│   │   │   ├── productos.css       # Estilos del catálogo
+│   │   │   ├── producto.css        # Estilos de detalle
+│   │   │   ├── contacto.css        # Estilos de contacto
+│   │   │   └── nuevo-producto.css  # Estilos del formulario admin
+│   │   ├── App.jsx                 # Componente principal con rutas
+│   │   └── main.jsx                # Punto de entrada React
+│   ├── public/
+│   │   └── assets/
+│   │       └── img/                # Imágenes estáticas (logos, banners)
+│   ├── .env.production             # Variables de entorno de producción
+│   ├── netlify.toml                # Configuración de Netlify
+│   ├── vite.config.js              # Configuración de Vite
+│   └── package.json
+│
+├── .gitignore
+├── package.json                     # Scripts raíz del proyecto
+└── README.md                        # Este archivo
 ```
 
 ## Requisitos previos
 
 - [Node.js](https://nodejs.org/) v18 o superior
 - npm 9+ (incluido con Node)
+- Cuenta de [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (o MongoDB local)
 
-## Instalación y ejecución
+## Instalación y configuración
 
-Cada subproyecto maneja sus dependencias en forma independiente. Desde la raíz del repositorio:
+### 1. Clonar el repositorio
 
-### Backend (`/backend`)
+```bash
+git clone https://github.com/FedeLeonardis/hermanosJota_e-commerce.git
+cd hermanosJota_e-commerce
+```
+
+### 2. Configurar el Backend
 
 ```bash
 cd backend
 npm install
-
-# desarrollo con recarga automática
-npm run dev
-
-# ejecución estándar (por ejemplo, en producción)
-npm start
 ```
 
-El servidor escucha en `http://localhost:5000` por defecto y expone:
+Crear archivo `.env` basado en `.env.example`:
 
-| Método | Ruta              | Descripción                          |
-| ------ | ----------------- | ------------------------------------ |
-| GET    | `/api/productos`  | Devuelve la lista completa del catálogo |
-| GET    | `/api/productos/:id` | Obtiene un producto por identificador |
+```bash
+cp .env.example .env
+```
 
-Podés redefinir el puerto con la variable de entorno `PORT`.
+Editar `.env` con tus credenciales:
 
-### Frontend (`/client`)
+```env
+# Puerto del servidor
+PORT=5000
 
-En una terminal separada, también desde la raíz:
+# URI de MongoDB Atlas (o local: mongodb://localhost:27017/muebleria)
+DB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/muebleria
+
+# URL del frontend (para CORS)
+FRONTEND_URL=http://localhost:5173
+
+# Entorno
+NODE_ENV=development
+```
+
+### 3. Configurar el Frontend
+
+```bash
+cd ../client
+npm install
+```
+
+Crear archivo `.env.local` para desarrollo:
+
+```bash
+echo "VITE_API_URL=http://localhost:5000" > .env.local
+```
+
+Para producción, editar `.env.production`:
+
+```env
+VITE_API_URL=https://tu-backend.onrender.com
+```
+
+## Ejecución en desarrollo
+
+Cada subproyecto debe ejecutarse en terminales separadas.
+
+### Backend
+
+```bash
+cd backend
+npm run dev
+```
+
+El servidor escucha en `http://localhost:5000` (o el puerto definido en `.env`)
+
+### Frontend
 
 ```bash
 cd client
-npm install
-
-# entorno de desarrollo con hot reload
 npm run dev
-
-# build y servidor de previsualización (simula producción)
-npm run build
-npm start
 ```
 
-Vite abre la aplicación en `http://localhost:5173` apuntando al backend local.
+La aplicación se abre en `http://localhost:5173`
+
+## API Endpoints
+
+El backend expone los siguientes endpoints:
+
+| Método | Ruta                  | Descripción                              |
+|--------|-----------------------|------------------------------------------|
+| GET    | `/api/productos`      | Obtiene todos los productos              |
+| GET    | `/api/productos/:id`  | Obtiene un producto por ID               |
+| POST   | `/api/productos`      | Crea un nuevo producto                   |
+| PUT    | `/api/productos/:id`  | Actualiza un producto existente          |
+| DELETE | `/api/productos/:id`  | Elimina un producto                      |
+
+### Ejemplo de respuesta GET `/api/productos/:id`
+
+```json
+{
+  "_id": "674567890abcdef123456789",
+  "nombre": "Sofá Moderno",
+  "descripcion": "Sofá de 3 plazas con diseño contemporáneo",
+  "precio": 45000,
+  "stock": 5,
+  "imagenUrl": "https://example.com/sofa.jpg",
+  "features": {
+    "medidas": "200cm x 90cm x 85cm",
+    "materiales": "Tela premium, estructura de madera",
+    "tapizado": "Tapizado removible y lavable",
+    "garantia": "2 años"
+  }
+}
+```
+
+### Ejemplo de request POST `/api/productos`
+
+```json
+{
+  "nombre": "Mesa de Comedor",
+  "descripcion": "Mesa extensible para 6-8 personas",
+  "precio": 35000,
+  "stock": 3,
+  "imagenUrl": "https://example.com/mesa.jpg",
+  "features": {
+    "medidas": "160cm x 90cm (extensible a 240cm)",
+    "materiales": "Madera maciza de roble",
+    "acabado": "Barniz mate",
+    "extension": "Sistema de extensión central"
+  }
+}
+```
+
+## Modelo de Datos
+
+### Product Schema
+
+```javascript
+{
+  nombre: String (required),
+  descripcion: String (required),
+  precio: Number (required, min: 0),
+  stock: Number (required, min: 0),
+  imagenUrl: String (required),
+  features: {
+    medidas: String,
+    materiales: String,
+    acabado: String,
+    peso: String,
+    capacidad: String,
+    modulares: String,
+    tapizado: String,
+    confort: String,
+    rotacion: String,
+    garantia: String,
+    almacenamiento: String,
+    colchon: String,
+    sostenibilidad: String,
+    extension: String,
+    apilables: String,
+    incluye: String,
+    cables: String,
+    certificación: String,
+    regulación: String,
+    caracteristica: String
+  }
+}
+```
+
+Todos los campos de `features` son opcionales y pueden agregarse dinámicamente desde el formulario de administración.
+
+## Funcionalidades principales
+
+### Catálogo de productos
+- Visualización en grid responsivo
+- Búsqueda en tiempo real por nombre
+- Navegación a detalle de cada producto
+
+### Detalle de producto
+- Carga dinámica desde API usando React Router params
+- Visualización de features del producto
+- Opción de agregar al carrito
+- Botón de eliminación (solo admin) con modal de confirmación
+- Manejo de estados de carga y error
+
+### Administración
+- Formulario de creación de productos
+- Selector dinámico de features opcionales
+- Validación de campos requeridos
+- Navegación automática al producto creado
+- Refetch automático de la lista de productos
+
+### Carrito de compras
+- Contador visual en el header
+- Agregado de productos con cantidad
+- Vaciar carrito completo
+
+## Scripts disponibles
+
+### Backend (`/backend`)
+
+```bash
+npm run dev      # Desarrollo con nodemon (recarga automática)
+npm start        # Producción con Node estándar
+```
+
+### Frontend (`/client`)
+
+```bash
+npm run dev      # Servidor de desarrollo con HMR
+npm run build    # Build de producción en /dist
+npm run preview  # Preview del build de producción
+npm start        # Alias de preview --host (para red local)
+```
+
+## Deployment
+
+### Backend (Render)
+
+1. Crear nuevo Web Service en Render
+2. Conectar repositorio de GitHub
+3. Configurar build command: `cd backend && npm install`
+4. Configurar start command: `cd backend && npm start`
+5. Agregar variables de entorno:
+   - `DB_URI`: URI de MongoDB Atlas
+   - `FRONTEND_URL`: URL de Netlify
+   - `NODE_ENV`: production
+
+### Frontend (Netlify)
+
+1. Crear nuevo site en Netlify
+2. Conectar repositorio de GitHub
+3. Configurar build settings:
+   - Base directory: `client`
+   - Build command: `npm run build`
+   - Publish directory: `client/dist`
+4. Agregar variable de entorno:
+   - `VITE_API_URL`: URL del backend en Render
+
+### Enlaces de producción
+
+- **Frontend**: https://hermanos-jota-muebleria.netlify.app/
+- **Backend**: https://hermanosjota-e-commerce.onrender.com
 
 ## Arquitectura y decisiones clave
 
-- **Backend desacoplado del almacenamiento:** los productos se cargan desde un módulo JS estático (`data/productos.js`), lo que simplifica las pruebas iniciales. El enrutador (`routes/productosRoutes.js`) se encargará de las rutas del dominio.
-- **Manejo centralizado de errores:** `server.js` incluye middlewares para logging y respuestas uniformes ante rutas inexistentes o fallos internos.
-- **Estado global ligero en el frontend:** el carrito, la vista activa y la data del catálogo se administran con `useState` en `App.jsx`.
-- **Componentes reusables:** los componentes en `src/components` encapsulan secciones de UI (header, catálogo, tarjetas de producto, formulario de contacto) y reciben callbacks desde `App.jsx` para navegar o agregar al carrito.
-- **Estilos modulares:** `src/css` agrupa estilos por dominio (header, footer, productos, etc.) con un archivo de variables compartidas para mantener consistencia.
+### Backend
+- **MongoDB con Mongoose**: Permite esquemas flexibles y validación de datos
+- **Modelo de features opcional**: El objeto `features` acepta cualquier combinación de propiedades, permitiendo productos con características diferentes
+- **Middleware de logging**: Registra todas las peticiones HTTP para debugging
+- **Manejo centralizado de errores**: Middleware global que captura errores y devuelve respuestas JSON consistentes
+- **CORS configurado**: Permite requests desde el frontend tanto en desarrollo como producción
 
-## Scripts útiles
+### Frontend
+- **Estado global en App.jsx**: Usa `useState` para carrito, productos y búsqueda
+- **React Router con rutas dinámicas**: `/productos/:id` carga productos individuales
+- **Fetch con AbortController**: Cancela requests cuando el componente se desmonta
+- **Optimistic updates**: Actualiza la UI antes de confirmar con el servidor (mejor UX)
+- **Componentes reusables**: Separación clara entre componentes de presentación y lógica
+- **CSS modular con variables**: Mantiene consistencia visual y facilita temas
+- **Formularios controlados**: Todos los inputs manejan estado con React
 
-- `npm run dev` (en `/backend`): inicia el servidor Express con recarga automática gracias a `nodemon`.
-- `npm start` (en `/backend`): ejecuta el backend con Node estándar.
-- `npm run dev` (en `/client`): levanta el servidor de desarrollo de Vite.
-- `npm run build` (en `/client`): genera el bundle de producción en `dist/`.
-- `npm run preview` (en `/client`): sirve el build estático (sin forzar modo host).
-- `npm start` (en `/client`): alias de `vite preview --host` para probar el build en red local.
+## Licencia
 
-## Aqui los enlaces a los sitios
-https://hermanos-jota-muebleria.netlify.app/
-https://hermanosjota-e-commerce.onrender.com
+Este proyecto es de uso académico para el curso de Desarrollo de Aplicaciones Web en ITBA.
+
+## Contacto
+
+Para consultas sobre el proyecto, contactar a los integrantes del equipo a través de GitHub.

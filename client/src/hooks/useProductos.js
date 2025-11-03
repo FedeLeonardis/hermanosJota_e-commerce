@@ -13,14 +13,16 @@ const useProductos = (searchQuery) => {
       setError(null);
 
       try {
-        // 🚨 AQUÍ se usa tu URL del backend 🚨
-        const BASE_URL = "api/productos";
+        // 🚨 Ajuste para producción/Netlify: usar variable de entorno VITE_API_URL
+        // En desarrollo se sigue soportando el proxy de Vite (/api -> localhost:5000)
+        const rawBase = import.meta.env.VITE_API_URL ?? "/api"; // puede ser '/api' o 'https://mi-backend.onrender.com'
+        const base = rawBase.replace(/\/+$/, ""); // quitar slash final si existe
 
-        // Construye la URL completa con el parámetro de búsqueda (query string)
-        // Ejemplo: api/productos?q=silla
-        const url = `${BASE_URL}?q=${encodeURIComponent(searchQuery)}`;
+        // Construye la URL completa con el parámetro de búsqueda
+        // Resultado esperado: '<base>/productos?q=...' o '/api/productos?q=...'
+        const url = `${base}/productos?q=${encodeURIComponent(searchQuery)}`;
 
-        const response = await fetch(url);
+        const response = await fetch(url, { credentials: 'same-origin' });
 
         if (!response.ok) {
           // Lanza un error si la respuesta HTTP no es 2xx

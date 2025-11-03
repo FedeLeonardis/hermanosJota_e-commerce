@@ -256,12 +256,12 @@ body {
 }
 
 .btn-danger {
-  background: #dc3545;
+  background: var(--dusty-rose);
   color: white;
 }
 
 .btn-danger:hover {
-  background: #c82333;
+  background: #b56a5e;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
@@ -282,11 +282,36 @@ body {
   margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: flex-end;
 }
 
-.btn-delete {
-  width: 100%;
-  max-width: 300px;
+/* Botón específico para eliminar producto */
+.btn-eliminar-producto {
+  background: #C47A6D;
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 200px;
+}
+
+.btn-eliminar-producto:hover {
+  background: #b56a5e;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-eliminar-producto:active {
+  transform: translateY(0);
 }
 
 /* Modal de confirmación de eliminación */

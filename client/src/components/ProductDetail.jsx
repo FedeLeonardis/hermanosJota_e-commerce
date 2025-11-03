@@ -167,7 +167,7 @@ const ProductDetail = ({
 
           <div className="admin-actions">
             <button
-              className="btn btn-danger btn-delete"
+              className="btn-eliminar-producto"
               onClick={handleDeleteClick}
             >
               Eliminar Producto

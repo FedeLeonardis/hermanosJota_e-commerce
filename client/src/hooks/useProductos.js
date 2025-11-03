@@ -13,9 +13,14 @@ const useProductos = (searchQuery) => {
       setError(null);
 
       try {
-        // 🚨 Ajuste para producción/Netlify: usar variable de entorno VITE_API_URL
-        // En desarrollo se sigue soportando el proxy de Vite (/api -> localhost:5000)
-        const rawBase = import.meta.env.VITE_API_URL ?? "/api"; // puede ser '/api' o 'https://mi-backend.onrender.com'
+        // Prioridad para decidir la base URL del API:
+        // 1) Si VITE_API_URL fue definida en tiempo de build, usarla (producción).
+        // 2) Si estamos en modo desarrollo de Vite, usar el proxy local '/api' (dev proxy -> localhost:5000).
+        // 3) Si nada de lo anterior aplica, usar un fallback absoluto apuntando al backend en Render.
+        const viteApiUrl = import.meta.env.VITE_API_URL;
+        const isDev = import.meta.env.DEV === true;
+
+        const rawBase = viteApiUrl ?? (isDev ? "/api" : "https://hermanos-jota-e-commerce.onrender.com/api");
         const base = rawBase.replace(/\/+$/, ""); // quitar slash final si existe
 
         // Construye la URL completa con el parámetro de búsqueda

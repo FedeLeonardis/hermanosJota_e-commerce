@@ -7,10 +7,14 @@ import ProductCard from "./ProductCard.jsx";
  */
 const FeaturedProducts = ({ productos = [], onSelectProduct = () => {} }) => {
   // IDs elegidos para destacar productos de distintas categorías.
-  const featuredIds = [12, 8, 4];
+  const featuredIds = [
+    "690131118737d40c9df6b106",
+    "69080314e55c31981e4dc2fc",
+    "690803e4e55c31981e4dc2fd",
+  ];
 
   const featuredItems = productos.filter((producto) =>
-    featuredIds.includes(producto.id)
+    featuredIds.includes(producto._id)
   );
 
   // Si el backend no devuelve los IDs deseados mostramos estado vacío en el home.
@@ -26,7 +30,7 @@ const FeaturedProducts = ({ productos = [], onSelectProduct = () => {} }) => {
     <div className="productos-grid-destacados">
       {featuredItems.map((producto) => (
         <ProductCard
-          key={producto.id}
+          key={producto._id}
           producto={producto}
           onSelect={onSelectProduct}
         />

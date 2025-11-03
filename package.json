@@ -1,0 +1,20 @@
+{
+  "name": "hermanosjota_e-commerce",
+  "version": "1.0.0",
+  "description": "Proyecto full-stack que recrea el e-commerce de una mueblería. La solución consta de un backend en Express que expone el catálogo de productos y un frontend en React + Vite que ofrece navegación multipágina (home, catálogo, detalle y contacto), buscador, carrito visual y componentes destacados.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FedeLeonardis/hermanosJota_e-commerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FedeLeonardis/hermanosJota_e-commerce/issues"
+  },
+  "homepage": "https://github.com/FedeLeonardis/hermanosJota_e-commerce#readme"
+}

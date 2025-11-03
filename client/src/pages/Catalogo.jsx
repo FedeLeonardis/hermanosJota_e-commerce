@@ -67,7 +67,7 @@ function Catalogo({
           <ProductCard
             key={producto._id}
             producto={producto}
-            onSelect={onSelectProduct} // ✅ Esto ya estaba correcto
+            onSelect={onSelectProduct} 
           />
         ))}
       </div>

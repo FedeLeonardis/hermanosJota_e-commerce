@@ -8,7 +8,6 @@ function FormProductoNuevo() {
     stock: "",
     imagenUrl: "",
   });
-  //   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -105,7 +104,7 @@ function FormProductoNuevo() {
                 type="text"
                 name="imagenUrl"
                 id="imagen"
-                placeholder="IMagebn"
+                placeholder="Imagen"
                 value={formData.imagenUrl}
                 onChange={handleChange}
                 required

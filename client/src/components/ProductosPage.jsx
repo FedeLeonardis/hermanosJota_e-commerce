@@ -20,7 +20,7 @@ function ProductosPage() {
 
   return (
     <Catalogo
-      // ⚠️ Pasa el estado (productos, loading, error) como props al componente de presentación
+      // Pasa el estado (productos, loading, error) como props al componente de presentación
       productos={productos}
       isLoading={isLoading}
       error={error}

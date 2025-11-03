@@ -13,10 +13,8 @@ import {
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
-// import Contacto from "./components/Contacto.jsx";
 import Contacto from "./pages/Contacto.jsx";
 import HomePage from "./pages/HomePage.jsx";
-// import Catalogo from "./components/Catalogo.jsx";
 import Catalogo from "./pages/Catalogo.jsx";
 import FormProductoNuevo from "./pages/FormProductoNuevo.jsx";
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/nuevo-producto.css";
+import { API_CONFIG } from "../config/api.js";
 
 // Lista de features disponibles según el modelo del backend
 const AVAILABLE_FEATURES = [
@@ -89,7 +90,7 @@ function FormProductoNuevo({ onProductCreated }) {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/productos", {
+      const response = await fetch(API_CONFIG.ENDPOINTS.PRODUCTOS, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

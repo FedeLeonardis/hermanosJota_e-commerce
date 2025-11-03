@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getImageUrl } from "../config/api.js";
 import "../css/producto.css";
 
 /**
@@ -81,7 +82,7 @@ const ProductDetail = ({
             <img
               id="imgPrincipal"
               className="gallery-media"
-              src={imagenUrl}
+              src={getImageUrl(imagenUrl)}
               alt={titulo}
               loading="lazy"
             />

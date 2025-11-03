@@ -1,4 +1,5 @@
 import React from "react";
+import { getImageUrl } from "../config/api.js";
 
 import "../css/productos.css";
 import "../css/variables.css";
@@ -31,7 +32,7 @@ function ProductCard({ producto, onSelect = () => {} }) {
     >
       <img
         className="img-producto"
-        src={producto.imagenUrl}
+        src={getImageUrl(producto.imagenUrl)}
         alt={producto.nombre}
       />
       <h2 className="nombre-producto">{producto.nombre}</h2>

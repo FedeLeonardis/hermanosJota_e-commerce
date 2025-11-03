@@ -36,7 +36,6 @@ productosRouter.get("/", async (req, res, next) => {
 
 productosRouter.get("/:id", async (req, res, next) => {
   try {
-    const idProducto = parseInt(req.params.id, 10);
     const producto = await Producto.findById(req.params.id);
     if (!producto) {
       const error = new Error("Producto no encontrado.");
@@ -46,6 +45,8 @@ productosRouter.get("/:id", async (req, res, next) => {
     res.status(200).json(producto);
   } catch (error) {
     console.error("Error al obtener el producto por ID:", error.message);
+    error.status = 500;
+    next(error);
   }
 });
 
@@ -97,9 +98,13 @@ productosRouter.delete("/:id", async (req, res, next) => {
       error.status = 404;
       return next(error);
     }
+    res.status(200).json({
+      mensaje: "Producto eliminado con éxito.",
+      producto: productoEliminado,
+    });
   } catch (error) {
-    console.error("Error al eliminar el usuario:", error.message);
-    error.status = 404;
+    console.error("Error al eliminar el producto:", error.message);
+    error.status = 500;
     next(error);
   }
 });

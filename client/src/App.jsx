@@ -68,20 +68,6 @@ const fetchProducts = async (setProductsState, productsRequestStatus) => {
   }
 };
 
-/**
- * Crea un slug (URL amigable) a partir de una cadena de texto.
- * Ejemplo: "Mesa de Roble y Metal" -> "mesa-de-roble-y-metal"
- */
-const createSlug = (name) => {
-  if (!name) return "";
-  return name
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Quitar acentos
-    .replace(/[^a-z0-9\s-]/g, "") // Quitar caracteres especiales
-    .trim()
-    .replace(/\s+/g, "-"); // Reemplazar espacios por guiones
-};
 
 function App() {
   // Estado derivado del fetch de productos.
@@ -213,35 +199,126 @@ function App() {
   };
 
   // ------------------------------------------------------------------
+  // Lógica de Eliminación de Productos
+  // ------------------------------------------------------------------
+
+  const handleDeleteProduct = async (producto) => {
+    if (!producto || !producto._id) {
+      console.error("Producto inválido para eliminar");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${PRODUCTS_URL}/${producto._id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status} al eliminar el producto`);
+      }
+
+      // PRIMERO navegar de vuelta al catálogo
+      navigate("/productos");
+
+      // DESPUÉS actualizar la lista de productos eliminando el producto borrado
+      // Usamos setTimeout para asegurar que la navegación ocurra primero
+      setTimeout(() => {
+        setProductsState((prev) => ({
+          ...prev,
+          list: prev.list.filter((p) => p._id !== producto._id),
+        }));
+      }, 0);
+
+    } catch (error) {
+      console.error("Error al eliminar producto:", error);
+      alert("Hubo un error al eliminar el producto. Por favor, intenta de nuevo.");
+    }
+  };
+
+  // ------------------------------------------------------------------
   // 🌟 Componente Wrapper para Detalle (Usa useParams) 🌟
   // ------------------------------------------------------------------
 
   /**
-   * Wrapper que extrae el SLUG de la URL, busca el producto y gestiona el estado de carga.
+   * Wrapper que extrae el ID de la URL, hace fetch al endpoint individual y muestra el detalle.
    */
   const ProductDetailWrapper = () => {
     // ⬇️ Hook para obtener el parámetro dinámico 'id' de la URL: /productos/:id
-    const { id } = useParams(); // ⚠️ CAMBIO: Renombramos la desestructuración de 'slug' a 'id'
+    const { id } = useParams();
+    
+    // Estado local para el producto individual
+    const [productDetail, setProductDetail] = useState({
+      status: "idle",
+      data: null,
+      error: null,
+    });
 
-    // ⚠️ CAMBIO: Buscamos el producto comparando el ID de la URL con producto._id
-    const selectedProduct = products.find((producto) => producto._id === id);
+    // useEffect para hacer fetch del producto individual cuando cambia el ID
+    useEffect(() => {
+      if (!id) return;
 
-    if (isLoading) {
+      // Variable para controlar si el componente sigue montado
+      let isCancelled = false;
+
+      const fetchProductDetail = async () => {
+        setProductDetail({
+          status: "loading",
+          data: null,
+          error: null,
+        });
+
+        try {
+          const response = await fetch(`${PRODUCTS_URL}/${id}`);
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}`);
+          }
+          const data = await response.json();
+
+          // Solo actualizar el estado si el componente sigue montado
+          if (!isCancelled) {
+            setProductDetail({
+              status: "success",
+              data: data,
+              error: null,
+            });
+          }
+        } catch (error) {
+          console.error("Error al cargar el producto:", error);
+          // Solo actualizar el estado si el componente sigue montado
+          if (!isCancelled) {
+            setProductDetail({
+              status: "error",
+              data: null,
+              error: "Error al cargar el producto. Intenta nuevamente.",
+            });
+          }
+        }
+      };
+
+      fetchProductDetail();
+
+      // Función de limpieza: se ejecuta cuando el componente se desmonta o el ID cambia
+      return () => {
+        isCancelled = true;
+      };
+    }, [id]);
+
+    // Estados de carga
+    if (productDetail.status === "loading" || productDetail.status === "idle") {
       return (
-        <div className="state-message">Cargando productos y detalles...</div>
+        <div className="state-message">Cargando detalles del producto...</div>
       );
     }
 
-    if (fetchError) {
+    if (productDetail.error) {
       return (
         <div className="state-message state-error">
-          Error al cargar datos: {fetchError}
+          {productDetail.error}
         </div>
       );
     }
 
-    if (!selectedProduct) {
-      // Si no está cargando y no se encontró el producto, muestra error.
+    if (!productDetail.data) {
       return (
         <div className="state-message">
           Producto con ID "{id}" no disponible.
@@ -252,10 +329,11 @@ function App() {
     // Si se encuentra el producto, renderizamos el detalle
     return (
       <ProductDetail
-        key={selectedProduct._id}
-        producto={selectedProduct}
+        key={productDetail.data._id}
+        producto={productDetail.data}
         onBack={handleBackToCatalog}
         onAddToCart={handleAddToCart}
+        onDelete={handleDeleteProduct}
       />
     );
   };

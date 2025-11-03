@@ -255,6 +255,83 @@ body {
   color: var(--sage-green);
 }
 
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: var(--light-gray);
+  color: var(--charcoal);
+  border-color: var(--light-gray);
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+  border-color: #ccc;
+}
+
+/* Acciones de administrador */
+.admin-actions {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--light-gray);
+}
+
+.btn-delete {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Modal de confirmación de eliminación */
+.delete-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.delete-confirm-content {
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.delete-confirm-content p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  color: var(--charcoal);
+}
+
+.delete-confirm-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.delete-confirm-buttons .btn {
+  flex: 1;
+  min-width: 120px;
+}
+
 /* Divisor */
 .divider {
   height: 1px;

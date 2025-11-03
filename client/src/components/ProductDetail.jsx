@@ -9,10 +9,12 @@ const ProductDetail = ({
   producto,
   onBack = () => {},
   onAddToCart = () => {},
+  onDelete = () => {},
 }) => {
   const [cantidad, setCantidad] = useState(1);
   const [feedback, setFeedback] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   if (!producto) {
     return (
@@ -50,6 +52,20 @@ const ProductDetail = ({
         transition: "background-color 0.15s",
       }
     : {};
+
+  // Maneja la confirmación de eliminación
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = () => {
+    onDelete(producto);
+    setShowDeleteConfirm(false);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
+  };
 
   return (
     <div className="containerProd">
@@ -123,6 +139,38 @@ const ProductDetail = ({
               disabled={stock === 0}
             >
               Añadir al carrito
+            </button>
+          </div>
+
+          {/* Modal de confirmación de eliminación */}
+          {showDeleteConfirm && (
+            <div className="delete-confirm-modal">
+              <div className="delete-confirm-content">
+                <p>¿Estás seguro de que deseas eliminar este producto?</p>
+                <div className="delete-confirm-buttons">
+                  <button
+                    className="btn btn-danger"
+                    onClick={handleConfirmDelete}
+                  >
+                    Eliminar
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handleCancelDelete}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="admin-actions">
+            <button
+              className="btn btn-danger btn-delete"
+              onClick={handleDeleteClick}
+            >
+              Eliminar Producto
             </button>
           </div>
 

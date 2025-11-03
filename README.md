@@ -106,3 +106,7 @@ Vite abre la aplicación en `http://localhost:5173` apuntando al backend local.
 - `npm run build` (en `/client`): genera el bundle de producción en `dist/`.
 - `npm run preview` (en `/client`): sirve el build estático (sin forzar modo host).
 - `npm start` (en `/client`): alias de `vite preview --host` para probar el build en red local.
+
+## Aqui los enlaces a los sitios
+https://hermanos-jota-muebleria.netlify.app/
+https://hermanosjota-e-commerce.onrender.com

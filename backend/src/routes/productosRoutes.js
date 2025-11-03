@@ -3,9 +3,6 @@ const productosRouter = express.Router();
 const mongoose = require("mongoose");
 const Producto = require("../models/Product");
 
-// const productos = require("../data/productos");
-const productos = require("../../data/productos");
-
 //Get desde la BD
 productosRouter.get("/", async (req, res, next) => {
   try {

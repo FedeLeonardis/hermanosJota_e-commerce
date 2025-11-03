@@ -169,16 +169,15 @@ function App() {
    * Usa el nombre del producto para generar el SLUG y la URL.
    */
   const showProductDetail = (producto) => {
-    if (!producto || !producto.nombre) return;
+    // ⚠️ CAMBIO: Usamos el ID de la base de datos (producto._id)
+    if (!producto || !producto._id) return;
 
-    const slug = createSlug(producto.nombre); // Generamos el slug
-
-    // Actualizamos el título inmediatamente
+    // Actualizamos el título inmediatamente (opcional)
     if (typeof document !== "undefined") {
       document.title = `HJ — ${producto.nombre}`;
     }
-    // Navegamos usando el slug
-    navigate(`/productos/${slug}`);
+    // ⚠️ CAMBIO: Navegamos usando el ID
+    navigate(`/productos/${producto._id}`);
   };
 
   /**
@@ -218,13 +217,11 @@ function App() {
    * Wrapper que extrae el SLUG de la URL, busca el producto y gestiona el estado de carga.
    */
   const ProductDetailWrapper = () => {
-    // ⬇️ Hook para obtener el parámetro dinámico 'slug' de la URL: /productos/:slug
-    const { slug } = useParams();
+    // ⬇️ Hook para obtener el parámetro dinámico 'id' de la URL: /productos/:id
+    const { id } = useParams(); // ⚠️ CAMBIO: Renombramos la desestructuración de 'slug' a 'id'
 
-    // Buscamos el producto comparando el slug de la URL con el slug generado dinámicamente
-    const selectedProduct = products.find(
-      (producto) => createSlug(producto.nombre) === slug
-    );
+    // ⚠️ CAMBIO: Buscamos el producto comparando el ID de la URL con producto._id
+    const selectedProduct = products.find((producto) => producto._id === id);
 
     if (isLoading) {
       return (
@@ -243,14 +240,16 @@ function App() {
     if (!selectedProduct) {
       // Si no está cargando y no se encontró el producto, muestra error.
       return (
-        <div className="state-message">Producto "{slug}" no disponible.</div>
+        <div className="state-message">
+          Producto con ID "{id}" no disponible.
+        </div>
       );
     }
 
     // Si se encuentra el producto, renderizamos el detalle
     return (
       <ProductDetail
-        key={selectedProduct.id}
+        key={selectedProduct._id}
         producto={selectedProduct}
         onBack={handleBackToCatalog}
         onAddToCart={handleAddToCart}
@@ -266,7 +265,7 @@ function App() {
     <>
       <Header
         onNavigate={handleNavigate}
-        // Determinamos la vista activa por la ruta
+        // La lógica para determinar la vista activa en el Header se mantiene
         activeView={
           location.pathname === "/"
             ? "home"
@@ -307,8 +306,8 @@ function App() {
             }
           />
 
-          {/* RUTA DE DETALLE: Espera un slug en lugar de un ID */}
-          <Route path="/productos/:slug" element={<ProductDetailWrapper />} />
+          {/* 🌟 RUTA DE DETALLE MODIFICADA: Ahora espera el ID del producto */}
+          <Route path="/productos/:id" element={<ProductDetailWrapper />} />
 
           <Route path="/contacto" element={<Contacto />} />
 

@@ -18,6 +18,7 @@ import Contacto from "./pages/Contacto.jsx";
 import HomePage from "./pages/HomePage.jsx";
 // import Catalogo from "./components/Catalogo.jsx";
 import Catalogo from "./pages/Catalogo.jsx";
+import FormProductoNuevo from "./pages/FormProductoNuevo.jsx";
 
 // Configuración de la API
 import { API_CONFIG } from "./config/api.js";
@@ -88,7 +89,7 @@ function App() {
   const location = useLocation();
 
   // ------------------------------------------------------------------
-  // 🔄 useEffects para Carga y Side Effects (Scroll/Título/Buscador)
+  // useEffects para Carga y Side Effects (Scroll/Título/Buscador)
   // ------------------------------------------------------------------
 
   // 1. Carga inicial de productos
@@ -133,8 +134,8 @@ function App() {
     : products;
 
   // ------------------------------------------------------------------
-  // 🗺️ Funciones de Navegación (usan useNavigate)
-  // ------------------------------------------------------------------
+  // Funciones de Navegación (usan useNavigate)
+  // -----------------------------------------------------------------
 
   // Navegación principal del Header
   const handleNavigate = (view) => {
@@ -154,23 +155,23 @@ function App() {
   };
 
   /**
-   * 🗺️ Navega al detalle del producto.
+   * Navega al detalle del producto.
    * Usa el nombre del producto para generar el SLUG y la URL.
    */
   const showProductDetail = (producto) => {
-    // ⚠️ CAMBIO: Usamos el ID de la base de datos (producto._id)
+    //Usamos el ID de la base de datos (producto._id)
     if (!producto || !producto._id) return;
 
     // Actualizamos el título inmediatamente (opcional)
     if (typeof document !== "undefined") {
       document.title = `HJ — ${producto.nombre}`;
     }
-    // ⚠️ CAMBIO: Navegamos usando el ID
+    // Navegamos usando el ID
     navigate(`/productos/${producto._id}`);
   };
 
   /**
-   * 🗺️ Vuelve a la vista de catálogo.
+   *  Vuelve a la vista de catálogo.
    */
   const handleBackToCatalog = () => {
     navigate("/productos");
@@ -209,42 +210,47 @@ function App() {
     }
 
     try {
+      // Actualizar la lista PRIMERO (optimistic update)
+      setProductsState((prev) => ({
+        ...prev,
+        list: prev.list.filter((p) => p._id !== producto._id),
+      }));
+
+      // Navegar inmediatamente al catálogo
+      navigate("/productos", { replace: true });
+
+      // Hacer el DELETE después (el producto ya no está en la UI)
       const response = await fetch(`${PRODUCTS_URL}/${producto._id}`, {
         method: "DELETE",
       });
 
       if (!response.ok) {
+        // Si falla, restaurar el producto
+        setProductsState((prev) => ({
+          ...prev,
+          list: [...prev.list, producto].sort((a, b) => a._id.localeCompare(b._id)),
+        }));
         throw new Error(`Error ${response.status} al eliminar el producto`);
       }
 
-      // PRIMERO navegar de vuelta al catálogo
-      navigate("/productos");
-
-      // DESPUÉS actualizar la lista de productos eliminando el producto borrado
-      // Usamos setTimeout para asegurar que la navegación ocurra primero
-      setTimeout(() => {
-        setProductsState((prev) => ({
-          ...prev,
-          list: prev.list.filter((p) => p._id !== producto._id),
-        }));
-      }, 0);
-
     } catch (error) {
       console.error("Error al eliminar producto:", error);
-      alert("Hubo un error al eliminar el producto. Por favor, intenta de nuevo.");
+      alert("Hubo un error al eliminar el producto. Se ha restaurado en la lista.");
     }
   };
 
   // ------------------------------------------------------------------
-  // 🌟 Componente Wrapper para Detalle (Usa useParams) 🌟
+  //  Componente Wrapper para Detalle (Usa useParams) 
   // ------------------------------------------------------------------
 
   /**
    * Wrapper que extrae el ID de la URL, hace fetch al endpoint individual y muestra el detalle.
    */
   const ProductDetailWrapper = () => {
-    // ⬇️ Hook para obtener el parámetro dinámico 'id' de la URL: /productos/:id
+    // Hook para obtener el parámetro dinámico 'id' de la URL: /productos/:id
     const { id } = useParams();
+    
+    console.log('ProductDetailWrapper RENDER - ID:', id);
     
     // Estado local para el producto individual
     const [productDetail, setProductDetail] = useState({
@@ -257,8 +263,10 @@ function App() {
     useEffect(() => {
       if (!id) return;
 
-      // Variable para controlar si el componente sigue montado
-      let isCancelled = false;
+      console.log('🔍 ProductDetailWrapper - Iniciando fetch para ID:', id);
+
+      // AbortController para cancelar el fetch si el componente se desmonta
+      const abortController = new AbortController();
 
       const fetchProductDetail = async () => {
         setProductDetail({
@@ -268,38 +276,44 @@ function App() {
         });
 
         try {
-          const response = await fetch(`${PRODUCTS_URL}/${id}`);
+          console.log('📡 Haciendo fetch a:', `${PRODUCTS_URL}/${id}`);
+          const response = await fetch(`${PRODUCTS_URL}/${id}`, {
+            signal: abortController.signal, // Pasar la señal de abort
+          });
+          
           if (!response.ok) {
             throw new Error(`Error ${response.status}`);
           }
           const data = await response.json();
 
-          // Solo actualizar el estado si el componente sigue montado
-          if (!isCancelled) {
-            setProductDetail({
-              status: "success",
-              data: data,
-              error: null,
-            });
-          }
+          console.log('✅ Fetch exitoso para producto:', data.nombre);
+          setProductDetail({
+            status: "success",
+            data: data,
+            error: null,
+          });
         } catch (error) {
-          console.error("Error al cargar el producto:", error);
-          // Solo actualizar el estado si el componente sigue montado
-          if (!isCancelled) {
-            setProductDetail({
-              status: "error",
-              data: null,
-              error: "Error al cargar el producto. Intenta nuevamente.",
-            });
+          // Ignorar errores de abort
+          if (error.name === 'AbortError') {
+            console.log('❌ Fetch cancelado para producto:', id);
+            return;
           }
+          
+          console.error("Error al cargar el producto:", error);
+          setProductDetail({
+            status: "error",
+            data: null,
+            error: "Error al cargar el producto. Intenta nuevamente.",
+          });
         }
       };
 
       fetchProductDetail();
 
-      // Función de limpieza: se ejecuta cuando el componente se desmonta o el ID cambia
+      // Función de limpieza: abortar el fetch cuando el componente se desmonte
       return () => {
-        isCancelled = true;
+        console.log('🧹 Cleanup: Abortando fetch para ID:', id);
+        abortController.abort();
       };
     }, [id]);
 
@@ -339,7 +353,7 @@ function App() {
   };
 
   // ------------------------------------------------------------------
-  // 🖼️ Renderizado Principal con React Router
+  // Renderizado Principal con React Router
   // ------------------------------------------------------------------
 
   return (
@@ -387,11 +401,13 @@ function App() {
             }
           />
 
-          {/* 🌟 RUTA DE DETALLE MODIFICADA: Ahora espera el ID del producto */}
+          {/* RUTA DE DETALLE MODIFICADA: Ahora espera el ID del producto */}
           <Route path="/productos/:id" element={<ProductDetailWrapper />} />
 
           <Route path="/contacto" element={<Contacto />} />
 
+          <Route path="/admin/crear-producto" element={<FormProductoNuevo />} />
+                      
           <Route
             path="*"
             element={

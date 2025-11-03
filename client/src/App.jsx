@@ -198,6 +198,15 @@ function App() {
   };
 
   // ------------------------------------------------------------------
+  // Función para refrescar productos desde cualquier componente
+  // ------------------------------------------------------------------
+
+  const handleRefreshProducts = () => {
+    productsRequestStatus.current = "idle";
+    fetchProducts(setProductsState, productsRequestStatus);
+  };
+
+  // ------------------------------------------------------------------
   // Lógica de Eliminación de Productos
   // ------------------------------------------------------------------
 
@@ -404,7 +413,10 @@ function App() {
 
           <Route path="/contacto" element={<Contacto />} />
 
-          <Route path="/admin/crear-producto" element={<FormProductoNuevo />} />
+          <Route 
+            path="/admin/crear-producto" 
+            element={<FormProductoNuevo onProductCreated={handleRefreshProducts} />} 
+          />
                       
           <Route
             path="*"

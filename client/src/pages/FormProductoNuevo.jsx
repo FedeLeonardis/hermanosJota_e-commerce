@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/nuevo-producto.css";
 
 // Lista de features disponibles según el modelo del backend
@@ -25,7 +26,9 @@ const AVAILABLE_FEATURES = [
   { value: "caracteristica", label: "Característica" },
 ];
 
-function FormProductoNuevo() {
+function FormProductoNuevo({ onProductCreated }) {
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
@@ -110,7 +113,19 @@ function FormProductoNuevo() {
       });
       setFeatures({});
       
-      alert("Producto creado exitosamente");
+      // Refrescar la lista de productos en el componente padre
+      if (onProductCreated) {
+        onProductCreated();
+      }
+
+      // Navegar al catálogo o a la página del producto creado
+      if (data.producto && data.producto._id) {
+        // Opción 1: Ir a la página del producto recién creado
+        navigate(`/productos/${data.producto._id}`);
+      } else {
+        // Opción 2: Ir al catálogo
+        navigate("/productos");
+      }
     } catch (error) {
       console.error("Error:", error);
       alert("Hubo un problema al guardar el producto");

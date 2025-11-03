@@ -13,21 +13,14 @@ const useProductos = (searchQuery) => {
       setError(null);
 
       try {
-        // Prioridad para decidir la base URL del API:
-        // 1) Si VITE_API_URL fue definida en tiempo de build, usarla (producción).
-        // 2) Si estamos en modo desarrollo de Vite, usar el proxy local '/api' (dev proxy -> localhost:5000).
-        // 3) Si nada de lo anterior aplica, usar un fallback absoluto apuntando al backend en Render.
-        const viteApiUrl = import.meta.env.VITE_API_URL;
-        const isDev = import.meta.env.DEV === true;
+        // 🚨 AQUÍ se usa tu URL del backend 🚨
+        const BASE_URL = "api/productos";
 
-        const rawBase = viteApiUrl ?? (isDev ? "/api" : "https://hermanos-jota-e-commerce.onrender.com/api");
-        const base = rawBase.replace(/\/+$/, ""); // quitar slash final si existe
+        // Construye la URL completa con el parámetro de búsqueda (query string)
+        // Ejemplo: api/productos?q=silla
+        const url = `${BASE_URL}?q=${encodeURIComponent(searchQuery)}`;
 
-        // Construye la URL completa con el parámetro de búsqueda
-        // Resultado esperado: '<base>/productos?q=...' o '/api/productos?q=...'
-        const url = `${base}/productos?q=${encodeURIComponent(searchQuery)}`;
-
-        const response = await fetch(url, { credentials: 'same-origin' });
+        const response = await fetch(url);
 
         if (!response.ok) {
           // Lanza un error si la respuesta HTTP no es 2xx

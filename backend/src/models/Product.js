@@ -8,8 +8,8 @@ const productoSchema = new mongoose.Schema(
     },
     descripcion: {
       type: String,
-      trim: [true, "La descripción es obligatoria."],
-      required: true,
+      trim: true,
+      required: [true, "La descripción es obligatoria."],
     },
     precio: {
       type: Number,

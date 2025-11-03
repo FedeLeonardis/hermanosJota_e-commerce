@@ -19,8 +19,11 @@ import HomePage from "./pages/HomePage.jsx";
 // import Catalogo from "./components/Catalogo.jsx";
 import Catalogo from "./pages/Catalogo.jsx";
 
+// Configuración de la API
+import { API_CONFIG } from "./config/api.js";
+
 // Endpoint base del backend que expone el catálogo.
-const PRODUCTS_URL = "api/productos";
+const PRODUCTS_URL = API_CONFIG.ENDPOINTS.PRODUCTOS;
 
 /**
  * Función para cargar productos. Usa el estado de React internamente.

@@ -7,17 +7,21 @@ import {
   useNavigate,
   useLocation,
   useParams,
+  Navigate,
 } from "react-router-dom";
 
 // Componentes de alto nivel que componen cada vista de la aplicación.
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
+
 import Contacto from "./pages/Contacto.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import Catalogo from "./pages/Catalogo.jsx";
 import FormProductoNuevo from "./pages/FormProductoNuevo.jsx";
-
+import RegisterPage from "./pages/RegisterPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import UserProfile from "./pages/UserProfile.jsx";
 // Configuración de la API
 import { API_CONFIG } from "./config/api.js";
 
@@ -67,8 +71,31 @@ const fetchProducts = async (setProductsState, productsRequestStatus) => {
   }
 };
 
-
 function App() {
+  // Al cargar la app, verificamos si el usuario está logueado
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const res = await fetch(API_CONFIG.ENDPOINTS.CHECKSESSION, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setCurrentUser(data.usuario);
+        } else {
+          setCurrentUser(null);
+        }
+      } catch (error) {
+        console.error("Error verificando sesión:", error);
+        setCurrentUser(null);
+      }
+    };
+
+    fetchSession();
+  }, []);
+
   // Estado derivado del fetch de productos.
   const [productsState, setProductsState] = useState({
     status: "idle",
@@ -85,6 +112,26 @@ function App() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [currentUser, setCurrentUser] = useState(null);
+  const handleLoginSuccess = (userData) => {
+    setCurrentUser(userData);
+    navigate("/");
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch(API_CONFIG.ENDPOINTS.LOGOUT, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error("Error al cerrar sesión:", err);
+    } finally {
+      setCurrentUser(null);
+      navigate("/iniciar-sesion");
+    }
+  };
 
   // ------------------------------------------------------------------
   // useEffects para Carga y Side Effects (Scroll/Título/Buscador)
@@ -144,6 +191,15 @@ function App() {
         break;
       case "contact":
         path = "/contacto";
+        break;
+      case "register":
+        path = "/registro";
+        break;
+      case "login":
+        path = "/iniciar-sesion";
+        break;
+      case "profile":
+        path = "/profile";
         break;
       default:
         path = "/";
@@ -235,19 +291,22 @@ function App() {
         // Si falla, restaurar el producto
         setProductsState((prev) => ({
           ...prev,
-          list: [...prev.list, producto].sort((a, b) => a._id.localeCompare(b._id)),
+          list: [...prev.list, producto].sort((a, b) =>
+            a._id.localeCompare(b._id)
+          ),
         }));
         throw new Error(`Error ${response.status} al eliminar el producto`);
       }
-
     } catch (error) {
       console.error("Error al eliminar producto:", error);
-      alert("Hubo un error al eliminar el producto. Se ha restaurado en la lista.");
+      alert(
+        "Hubo un error al eliminar el producto. Se ha restaurado en la lista."
+      );
     }
   };
 
   // ------------------------------------------------------------------
-  //  Componente Wrapper para Detalle (Usa useParams) 
+  //  Componente Wrapper para Detalle (Usa useParams)
   // ------------------------------------------------------------------
 
   /**
@@ -256,9 +315,9 @@ function App() {
   const ProductDetailWrapper = () => {
     // Hook para obtener el parámetro dinámico 'id' de la URL: /productos/:id
     const { id } = useParams();
-    
-    console.log('ProductDetailWrapper RENDER - ID:', id);
-    
+
+    console.log("ProductDetailWrapper RENDER - ID:", id);
+
     // Estado local para el producto individual
     const [productDetail, setProductDetail] = useState({
       status: "idle",
@@ -270,7 +329,7 @@ function App() {
     useEffect(() => {
       if (!id) return;
 
-      console.log('🔍 ProductDetailWrapper - Iniciando fetch para ID:', id);
+      console.log("🔍 ProductDetailWrapper - Iniciando fetch para ID:", id);
 
       // AbortController para cancelar el fetch si el componente se desmonta
       const abortController = new AbortController();
@@ -283,17 +342,17 @@ function App() {
         });
 
         try {
-          console.log('📡 Haciendo fetch a:', `${PRODUCTS_URL}/${id}`);
+          console.log("📡 Haciendo fetch a:", `${PRODUCTS_URL}/${id}`);
           const response = await fetch(`${PRODUCTS_URL}/${id}`, {
             signal: abortController.signal, // Pasar la señal de abort
           });
-          
+
           if (!response.ok) {
             throw new Error(`Error ${response.status}`);
           }
           const data = await response.json();
 
-          console.log('✅ Fetch exitoso para producto:', data.nombre);
+          console.log("✅ Fetch exitoso para producto:", data.nombre);
           setProductDetail({
             status: "success",
             data: data,
@@ -301,11 +360,11 @@ function App() {
           });
         } catch (error) {
           // Ignorar errores de abort
-          if (error.name === 'AbortError') {
-            console.log('❌ Fetch cancelado para producto:', id);
+          if (error.name === "AbortError") {
+            console.log("❌ Fetch cancelado para producto:", id);
             return;
           }
-          
+
           console.error("Error al cargar el producto:", error);
           setProductDetail({
             status: "error",
@@ -319,7 +378,7 @@ function App() {
 
       // Función de limpieza: abortar el fetch cuando el componente se desmonte
       return () => {
-        console.log('🧹 Cleanup: Abortando fetch para ID:', id);
+        console.log("🧹 Cleanup: Abortando fetch para ID:", id);
         abortController.abort();
       };
     }, [id]);
@@ -333,9 +392,7 @@ function App() {
 
     if (productDetail.error) {
       return (
-        <div className="state-message state-error">
-          {productDetail.error}
-        </div>
+        <div className="state-message state-error">{productDetail.error}</div>
       );
     }
 
@@ -379,6 +436,8 @@ function App() {
         }
         cartCount={cartCount}
         onClearCart={handleClearCart}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
       <div className="page-shell">
         <Routes>
@@ -413,11 +472,36 @@ function App() {
 
           <Route path="/contacto" element={<Contacto />} />
 
-          <Route 
-            path="/admin/crear-producto" 
-            element={<FormProductoNuevo onProductCreated={handleRefreshProducts} />} 
+          <Route
+            path="/admin/crear-producto"
+            element={
+              <FormProductoNuevo onProductCreated={handleRefreshProducts} />
+            }
           />
-                      
+
+          <Route path="/registro" element={<RegisterPage />} />
+
+          <Route
+            path="/iniciar-sesion"
+            element={
+              currentUser ? (
+                <Navigate to="/" />
+              ) : (
+                <LoginPage onLoginSuccess={handleLoginSuccess} />
+              )
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              currentUser ? (
+                <UserProfile currentUser={currentUser} />
+              ) : (
+                <Navigate to="/iniciar-sesion" />
+              )
+            }
+          />
+
           <Route
             path="*"
             element={

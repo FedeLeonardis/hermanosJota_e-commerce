@@ -10,6 +10,8 @@ const Header = ({
   activeView = "home",
   cartCount = 0,
   onClearCart = () => {},
+  currentUser = null,
+  onLogout = () => {},
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -42,8 +44,11 @@ const Header = ({
     onNavigate(view);
   };
 
-  const isActive = (view) => activeView === view;
+  const handleLogoutClick = () => {
+    onLogout();
+  };
 
+  const isActive = (view) => activeView === view;
   return (
     <div className="main-header-wrapper">
       <header className="main-header">
@@ -81,6 +86,38 @@ const Header = ({
           >
             CONTACTO
           </button>
+
+          {currentUser ? (
+            <>
+              <button
+                type="button"
+                className={isActive("profile") ? "active" : ""}
+                onClick={handleNavClick("profile")}
+              >
+                PERFIL
+              </button>
+              <button type="button" onClick={handleLogoutClick}>
+                LOGOUT{" "}
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                className={isActive("register") ? "active" : ""}
+                onClick={handleNavClick("register")}
+              >
+                REGISTRO
+              </button>
+              <button
+                type="button"
+                className={isActive("login") ? "active" : ""}
+                onClick={handleNavClick("login")}
+              >
+                ACCEDER
+              </button>
+            </>
+          )}
         </nav>
 
         <div

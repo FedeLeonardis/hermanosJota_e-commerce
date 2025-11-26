@@ -1,11 +1,16 @@
 // Configuración de la API
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export const API_CONFIG = {
   BASE_URL: API_BASE_URL,
   ENDPOINTS: {
     PRODUCTOS: `${API_BASE_URL}/api/productos`,
-  }
+    REGISTER: `${API_BASE_URL}/api/users/register`,
+    LOGIN: `${API_BASE_URL}/api/users/login`,
+    LOGOUT: `${API_BASE_URL}/api/users/logout`,
+    PROFILE: `${API_BASE_URL}/api/users/profile`,
+    CHECKSESSION: `${API_BASE_URL}/api/users/check-session`,
+  },
 };
 
 /**
@@ -14,23 +19,23 @@ export const API_CONFIG = {
  * @returns {string} - URL absoluta de la imagen
  */
 export const getImageUrl = (imageUrl) => {
-  if (!imageUrl) return '';
-  
+  if (!imageUrl) return "";
+
   // Si ya es una URL completa de internet (http/https pero no localhost)
-  if (imageUrl.startsWith('http') && !imageUrl.includes('localhost')) {
+  if (imageUrl.startsWith("http") && !imageUrl.includes("localhost")) {
     return imageUrl;
   }
-  
+
   // Si es una URL de localhost o relativa, construir con el backend correcto
-  if (imageUrl.includes('localhost') || imageUrl.startsWith('/images/')) {
+  if (imageUrl.includes("localhost") || imageUrl.startsWith("/images/")) {
     // Extraer solo la parte de /images/productos/...
-    const imagePath = imageUrl.includes('/images/') 
-      ? imageUrl.substring(imageUrl.indexOf('/images/'))
+    const imagePath = imageUrl.includes("/images/")
+      ? imageUrl.substring(imageUrl.indexOf("/images/"))
       : `/images/productos/${imageUrl}`;
-    
+
     return `${API_BASE_URL}${imagePath}`;
   }
-  
+
   // Si es solo el nombre del archivo
   return `${API_BASE_URL}/images/productos/${imageUrl}`;
 };

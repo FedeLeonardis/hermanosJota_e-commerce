@@ -3,18 +3,16 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const mongoose = require("mongoose");
-
+const cookieParser = require("cookie-parser");
 //Conexion de la BD
 mongoose
   .connect(process.env.DB_URI)
   .then(() => console.log("Conexion a la BD exitosa"))
   .catch(() => console.log("Error al conectar la BD"));
 
-// const productosRouter = require("./routes/productosRoutes");
-
 const productosRouter = require("./src/routes/productosRoutes");
+const userRouter = require("./src/routes/userRoutes");
 
-// const loggerMiddleware = require("./middleware/logger");
 const loggerMiddleware = require("./src/middleware/logger");
 
 // Puerto configurable mediante variable de entorno para facilitar despliegues.
@@ -27,9 +25,9 @@ const app = express();
 const corsOptions = {
   origin: process.env.FRONTEND_URL || "http://localhost:5173",
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
-
+app.use(cookieParser());
 app.use(cors(corsOptions));
 
 app.use(
@@ -51,6 +49,7 @@ app.get("/", (req, res) => {
 
 // Rutas de dominio principal agrupadas por recurso.
 app.use("/api/productos", productosRouter);
+app.use("/api/users", userRouter);
 
 // Manejo centralizado para rutas inexistentes.
 app.use((req, res, next) => {

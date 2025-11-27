@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, roles } = req.body;
     const existUSer = await Usuario.findOne({ $or: [{ email }, { username }] });
     if (existUSer) {
       return res
@@ -14,13 +14,19 @@ const registerUser = async (req, res, next) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const newUSer = new Usuario({ username, email, password: hashedPassword });
-    const savedUSer = await newUSer.save();
+    const newUser = new Usuario({
+      username,
+      email,
+      password: hashedPassword,
+      roles,
+    });
+    const savedUser = await newUser.save();
 
     res.status(201).json({
       _id: savedUSer._id,
-      username: savedUSer.username,
-      email: savedUSer.email,
+      username: savedUser.username,
+      email: savedUser.email,
+      roles: savedUser.roles,
     });
   } catch (error) {
     console.error("Error al crear usuario:", error.message);
@@ -44,7 +50,7 @@ const loginUser = async (req, res, next) => {
     }
 
     const token = jwt.sign(
-      { id: usuario._id, username: usuario.username },
+      { id: usuario._id, username: usuario.username, rol: usuario.roles },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -62,6 +68,7 @@ const loginUser = async (req, res, next) => {
           id: usuario._id,
           username: usuario.username,
           email: usuario.email,
+          roles: usuario.roles,
         },
       });
   } catch (error) {

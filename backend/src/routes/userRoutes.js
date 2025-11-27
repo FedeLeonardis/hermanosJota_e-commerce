@@ -9,4 +9,5 @@ usersRouter.post("/logout", userController.logoutUser);
 
 usersRouter.get("/profile", verifyToken, userController.getUserProfile);
 usersRouter.get("/check-session", verifyToken, userController.checkSession);
+
 module.exports = usersRouter;

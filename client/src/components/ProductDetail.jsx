@@ -11,6 +11,7 @@ const ProductDetail = ({
   onBack = () => {},
   onAddToCart = () => {},
   onDelete = () => {},
+  currentUser = null,
 }) => {
   const [cantidad, setCantidad] = useState(1);
   const [feedback, setFeedback] = useState("");
@@ -165,15 +166,16 @@ const ProductDetail = ({
               </div>
             </div>
           )}
-
-          <div className="admin-actions">
-            <button
-              className="btn-eliminar-producto"
-              onClick={handleDeleteClick}
-            >
-              Eliminar Producto
-            </button>
-          </div>
+          {currentUser?.roles?.includes("admin") && (
+            <div className="admin-actions">
+              <button
+                className="btn-eliminar-producto"
+                onClick={handleDeleteClick}
+              >
+                Eliminar Producto
+              </button>
+            </div>
+          )}
 
           <div className="divider"></div>
 

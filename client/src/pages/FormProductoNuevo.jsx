@@ -29,7 +29,7 @@ const AVAILABLE_FEATURES = [
 
 function FormProductoNuevo({ onProductCreated }) {
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
@@ -86,7 +86,9 @@ function FormProductoNuevo({ onProductCreated }) {
 
     const productData = {
       ...formData,
-      ...(Object.keys(filteredFeatures).length > 0 && { features: filteredFeatures }),
+      ...(Object.keys(filteredFeatures).length > 0 && {
+        features: filteredFeatures,
+      }),
     };
 
     try {
@@ -96,6 +98,7 @@ function FormProductoNuevo({ onProductCreated }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(productData),
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("Error al crear el producto");
@@ -113,7 +116,7 @@ function FormProductoNuevo({ onProductCreated }) {
         imagenUrl: "",
       });
       setFeatures({});
-      
+
       // Refrescar la lista de productos en el componente padre
       if (onProductCreated) {
         onProductCreated();
@@ -202,7 +205,7 @@ function FormProductoNuevo({ onProductCreated }) {
             {/* Sección de Features (Opcional) */}
             <div className="features-section">
               <h3>Features (Opcional)</h3>
-              
+
               {/* Selector para agregar nueva feature */}
               <div className="add-feature">
                 <select
@@ -232,9 +235,9 @@ function FormProductoNuevo({ onProductCreated }) {
               {/* Lista de features agregadas */}
               <div className="features-list">
                 {Object.keys(features).map((featureName) => {
-                  const featureLabel = AVAILABLE_FEATURES.find(
-                    (f) => f.value === featureName
-                  )?.label || featureName;
+                  const featureLabel =
+                    AVAILABLE_FEATURES.find((f) => f.value === featureName)
+                      ?.label || featureName;
 
                   return (
                     <div key={featureName} className="feature-item">

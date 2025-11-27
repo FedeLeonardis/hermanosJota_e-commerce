@@ -285,6 +285,7 @@ function App() {
       // Hacer el DELETE después (el producto ya no está en la UI)
       const response = await fetch(`${PRODUCTS_URL}/${producto._id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -412,6 +413,7 @@ function App() {
         onBack={handleBackToCatalog}
         onAddToCart={handleAddToCart}
         onDelete={handleDeleteProduct}
+        currentUser={currentUser}
       />
     );
   };
@@ -472,10 +474,20 @@ function App() {
 
           <Route path="/contacto" element={<Contacto />} />
 
-          <Route
+          {/* <Route
             path="/admin/crear-producto"
             element={
               <FormProductoNuevo onProductCreated={handleRefreshProducts} />
+            }
+          /> */}
+          <Route
+            path="/admin/crear-producto"
+            element={
+              currentUser ? (
+                <Navigate to="/" />
+              ) : (
+                <FormProductoNuevo onProductCreated={handleRefreshProducts} />
+              )
             }
           />
 

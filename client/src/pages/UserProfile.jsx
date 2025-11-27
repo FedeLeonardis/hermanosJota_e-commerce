@@ -36,6 +36,7 @@ function UserProfile() {
           <h2>{profile.message}</h2>
           <label>Usuario: {profile.usuario.username}</label>
           <label>ID: {profile.usuario.id}</label>
+          <label htmlFor="">Rol: {profile.usuario.rol}</label>
         </div>
       </div>
     </div>

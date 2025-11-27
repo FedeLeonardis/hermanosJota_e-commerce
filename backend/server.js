@@ -2,15 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
-//Conexion de la BD
-mongoose
-  .connect(process.env.DB_URI)
-  .then(() => console.log("Conexion a la BD exitosa"))
-  .catch(() => console.log("Error al conectar la BD"));
 
-const productosRouter = require("./src/routes/productosRoutes");
+const cookieParser = require("cookie-parser");
+const conectarDB = require("./src/config/db");
+
+const productosRouter = require("./src/routes/productoRoutes");
 const userRouter = require("./src/routes/userRoutes");
 
 const loggerMiddleware = require("./src/middleware/logger");
@@ -20,6 +16,8 @@ const puerto = process.env.PORT || 5000;
 
 //Permite servir las imagenes de los productos desde backend (si tienen dudas preguntar a Walter)
 const app = express();
+
+conectarDB();
 
 // Configuración de CORS para permitir peticiones desde el frontend
 const corsOptions = {

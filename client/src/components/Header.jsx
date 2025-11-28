@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import "../css/header.css";
 
-/**
- * Encabezado principal con navegación básica y popup del carrito.
- * Las acciones se delegan al componente padre mediante callbacks.
- */
 const Header = ({
   onNavigate = () => {},
   activeView = "home",
@@ -31,10 +27,15 @@ const Header = ({
     toggleCartPopup(false);
   };
 
-  // Placeholder para futura integración con checkout real.
   const handleCheckout = (e) => {
-    e.stopPropagation();
-    console.log("Finalizar compra - funcionalidad pendiente");
+    e.stopPropagation(); // Evita que se cierre el popup antes de tiempo
+
+    if (onNavigate) {
+      onNavigate("cart");
+    } else {
+      console.error("ERROR: La función onNavigate no está llegando al Header");
+    }
+
     toggleCartPopup(false);
   };
 
@@ -49,6 +50,7 @@ const Header = ({
   };
 
   const isActive = (view) => activeView === view;
+
   return (
     <div className="main-header-wrapper">
       <header className="main-header">
@@ -120,6 +122,11 @@ const Header = ({
           )}
         </nav>
 
+        {/* Si quieres que el ícono del carrito también se ilumine cuando estás 
+            en la página del carrito, puedes agregar la clase condicional aquí:
+            className={`cart ${isPopupOpen ? "open" : ""} ${isActive("cart") ? "active" : ""}`}
+            (Dependiendo de si tu CSS tiene estilos para .cart.active)
+        */}
         <div
           className={`cart ${isPopupOpen ? "open" : ""}`}
           onClick={() => toggleCartPopup()}
@@ -147,7 +154,7 @@ const Header = ({
               className="popup-btn"
               onClick={handleCheckout}
             >
-              Finalizar compra
+              Ver carrito
             </button>
           </div>
         </div>

@@ -1,7 +1,44 @@
+// const express = require("express");
+// const productosRouter = express.Router();
+// const productoController = require("../controllers/productoController");
+// const verifyToken = require("../middleware/authMiddleware");
+// const adminGuard = require("../middleware/adminGuard");
+
+// //Publicas
+// productosRouter.get("/", productoController.getProductos);
+
+// productosRouter.get("/:id", productoController.getProductoId);
+
+// //Protegidos
+// productosRouter.post(
+//   "/",
+//   verifyToken,
+//   adminGuard,
+//   productoController.agregarProducto
+// );
+
+// productosRouter.put(
+//   "/:id",
+//   verifyToken,
+//   adminGuard,
+//   productoController.editarProducto
+// );
+
+// productosRouter.delete(
+//   "/:id",
+//   verifyToken,
+//   adminGuard,
+//   productoController.eliminarProducto
+// );
+
+// module.exports = productosRouter;
+
 const express = require("express");
 const productosRouter = express.Router();
 const productoController = require("../controllers/productoController");
-const verifyToken = require("../middleware/authMiddleware");
+
+// 👇 CAMBIO IMPORTANTE: Usamos destructuración { protect }
+const { protect } = require("../middleware/authMiddleware");
 const adminGuard = require("../middleware/adminGuard");
 
 //Publicas
@@ -12,21 +49,21 @@ productosRouter.get("/:id", productoController.getProductoId);
 //Protegidos
 productosRouter.post(
   "/",
-  verifyToken,
+  protect, // 👈 Usamos 'protect'
   adminGuard,
   productoController.agregarProducto
 );
 
 productosRouter.put(
   "/:id",
-  verifyToken,
+  protect, // 👈 Usamos 'protect'
   adminGuard,
   productoController.editarProducto
 );
 
 productosRouter.delete(
   "/:id",
-  verifyToken,
+  protect, // 👈 Usamos 'protect'
   adminGuard,
   productoController.eliminarProducto
 );

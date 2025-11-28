@@ -11,6 +11,17 @@ const userRouter = require("./src/routes/userRoutes");
 
 const loggerMiddleware = require("./src/middleware/logger");
 
+// 👇 AGREGA ESTAS LÍNEAS DE DIAGNÓSTICO:
+console.log("------------------------------------------------");
+console.log("🔍 DIAGNÓSTICO DE VARIABLES DE ENTORNO:");
+console.log(
+  "📂 JWT_SECRET:",
+  process.env.JWT_SECRET
+    ? "✅ CARGADO"
+    : "❌ NO EXISTE (Revisa el archivo .env)"
+);
+console.log("------------------------------------------------");
+
 // Puerto configurable mediante variable de entorno para facilitar despliegues.
 const puerto = process.env.PORT || 5000;
 

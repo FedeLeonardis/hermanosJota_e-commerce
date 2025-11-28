@@ -23,8 +23,10 @@ function LoginPage({ onLoginSuccess }) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Usuario logueado", data.usuario);
-        onLoginSuccess(data.usuario);
+        console.log("Respuesta servidor:", data);
+
+        onLoginSuccess(data.token);
+
         alert("Login exitoso");
       } else {
         const errorData = await response.json();

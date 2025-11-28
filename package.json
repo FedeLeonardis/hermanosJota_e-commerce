@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/FedeLeonardis/hermanosJota_e-commerce/issues"
   },
-  "homepage": "https://github.com/FedeLeonardis/hermanosJota_e-commerce#readme"
+  "homepage": "https://github.com/FedeLeonardis/hermanosJota_e-commerce#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.7"
+  }
 }

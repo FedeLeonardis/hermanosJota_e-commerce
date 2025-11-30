@@ -1,11 +1,13 @@
-const Usuario = require("../models/User");
+const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res, next) => {
   try {
     const { username, email, password, roles } = req.body;
-    const existUser = await Usuario.findOne({ $or: [{ email }, { username }] }); // Corregido nombre variable
+
+    const existUser = await User.findOne({ $or: [{ email }, { username }] });
+
     if (existUser) {
       return res
         .status(400)
@@ -15,7 +17,7 @@ const registerUser = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = new Usuario({
+    const newUser = new User({
       username,
       email,
       password: hashedPassword,
@@ -41,20 +43,9 @@ const loginUser = async (req, res, next) => {
 
   try {
     console.log("👉 2. Body recibido:", req.body);
-
     const JWT_SECRET = process.env.JWT_SECRET;
 
-    console.log(
-      "👉 3. Clave Secreta:",
-      JWT_SECRET ? "✅ Definida correctamente" : "❌ Error"
-    );
-
-    // Checkpoint 3: Buscar en Base de Datos
-    const usuario = await Usuario.findOne({ email: req.body.email });
-    console.log(
-      "👉 4. Resultado búsqueda usuario:",
-      usuario ? "Encontrado" : "No encontrado"
-    );
+    const usuario = await User.findOne({ email: req.body.email });
 
     if (!usuario) {
       return res
@@ -62,13 +53,10 @@ const loginUser = async (req, res, next) => {
         .json({ message: "Credenciales invalidas (Email no existe)." });
     }
 
-    // Checkpoint 4: Comparar contraseña
-    console.log("👉 5. Comparando contraseñas...");
     const isValidPassword = await bcrypt.compare(
       req.body.password,
       usuario.password
     );
-    console.log("👉 6. Contraseña válida?:", isValidPassword);
 
     if (!isValidPassword) {
       return res
@@ -76,16 +64,11 @@ const loginUser = async (req, res, next) => {
         .json({ message: "Credenciales invalidas (Password incorrecto)." });
     }
 
-    // Checkpoint 5: Generar Token
-    console.log("👉 7. Generando token...");
-
-    // 👇 AQUÍ USAMOS LA VARIABLE QUE DEFINIMOS ARRIBA
     const token = jwt.sign(
       { id: usuario._id, username: usuario.username, rol: usuario.roles },
       JWT_SECRET,
       { expiresIn: "1h" }
     );
-    console.log("👉 8. Token generado con éxito");
 
     res
       .status(200)
@@ -97,7 +80,7 @@ const loginUser = async (req, res, next) => {
       })
       .json({
         message: "Login Exitoso",
-        token: token, // IMPORTANTE para tu frontend
+        token: token,
         usuario: {
           id: usuario._id,
           username: usuario.username,
@@ -107,19 +90,24 @@ const loginUser = async (req, res, next) => {
       });
   } catch (error) {
     console.error("❌ ERROR EN EL CATCH:", error);
-    // Pasamos el error al middleware de server.js para ver el stack completo
     next(error);
   }
 };
 
 const getUserProfile = async (req, res) => {
   try {
-    res.json({
-      message: `Bienvenido al perfil, ${req.usuario.username}`,
-      usuario: req.usuario,
-    });
+    const userId = req.user.id || req.user._id;
+
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    res.json(user);
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener el perfil." });
+    console.error("Error en profile:", error);
+    res.status(500).json({ message: "Error al obtener perfil" });
   }
 };
 
@@ -135,8 +123,13 @@ const logoutUser = (req, res) => {
 };
 
 const checkSession = (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ isAuthenticated: false });
+  }
+
   res.json({
-    usuario: req.usuario,
+    isAuthenticated: true,
+    user: req.user,
   });
 };
 

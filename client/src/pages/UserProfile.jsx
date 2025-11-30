@@ -15,6 +15,7 @@ function UserProfile() {
       if (!response.ok) throw new Error("No se pudo acceder al perfil");
 
       const profileData = await response.json();
+      console.log("Datos recibidos:", profileData); // Para debug
       setProfile(profileData);
     } catch (error) {
       console.error("Error al obtener perfil:", error);
@@ -25,7 +26,12 @@ function UserProfile() {
     fetchUserProfile();
   }, []);
 
-  if (!profile) return <p>Cargando perfil...</p>;
+  if (!profile)
+    return (
+      <div className="container" style={{ padding: "20px" }}>
+        Cargando perfil...
+      </div>
+    );
 
   return (
     <div className="container-global">
@@ -33,10 +39,35 @@ function UserProfile() {
         <div className="group">
           <h1>Perfil de usuario</h1>
 
-          <h2>{profile.message}</h2>
-          <label>Usuario: {profile.usuario.username}</label>
-          <label>ID: {profile.usuario.id}</label>
-          <label htmlFor="">Rol: {profile.usuario.rol}</label>
+          {/* Eliminamos profile.message porque el endpoint suele devolver solo el usuario */}
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              marginTop: "20px",
+            }}
+          >
+            <label>
+              <strong>Usuario:</strong> {profile.username}
+            </label>
+
+            <label>
+              <strong>Email:</strong> {profile.email}
+            </label>
+
+            <label>
+              <strong>ID:</strong> {profile._id}
+            </label>
+
+            <label>
+              <strong>Rol:</strong>{" "}
+              {Array.isArray(profile.roles)
+                ? profile.roles.join(", ")
+                : profile.roles}
+            </label>
+          </div>
         </div>
       </div>
     </div>

@@ -11,6 +11,29 @@ Proyecto full-stack de e-commerce completo para una mueblería. La solución con
 #### Devs que pasaron por aquí: 
 - Malena Zoe Blanco Di Beco
 
+
+## � Enlaces de Producción
+
+- **Frontend (Netlify)**: https://hermanos-jota-muebleria.netlify.app/
+- **Backend (Render)**: https://hermanosjota-e-commerce.onrender.com
+
+## �🎓 Credenciales de Prueba (Evaluadores)
+
+Para evaluar las funcionalidades de **administrador**, utilice estas credenciales:
+
+```
+Email: admin@gmail.com
+Contraseña: admin
+```
+
+**Acceso incluido:**
+- ✅ Crear productos desde el catálogo (tarjeta con +)
+- ✅ Editar productos existentes
+- ✅ Eliminar productos con confirmación
+- ✅ Todas las funcionalidades administrativas
+
+----
+
 ## Características principales
 
 ### Frontend
@@ -19,13 +42,16 @@ Proyecto full-stack de e-commerce completo para una mueblería. La solución con
 - **Gestión de estado global** con React Context API (autenticación y carrito)
 - **Navegación multipágina** con React Router (home, catálogo, detalle, contacto, perfil, carrito)
 - **UI condicional** que cambia según el estado de autenticación del usuario
-- **Carrito de compras persistente** con localStorage y contador visual en header
+- **Carrito de compras persistente** con localStorage por usuario (cada usuario mantiene su propio carrito)
 - **Proceso de checkout protegido** que requiere autenticación
 - **Página de perfil de usuario** con datos protegidos
 - **Listado completo del catálogo** con búsqueda en tiempo real por nombre
 - **Páginas de detalle dinámicas** que obtienen productos individuales desde la API
-- **Sistema de administración** para crear, ver y eliminar productos
+- **Sistema de administración completo** para crear, editar y eliminar productos (solo admins)
+- **Tarjeta de agregar producto** en el catálogo para acceso rápido al formulario de creación (solo visible para admins)
 - **Formulario de creación de productos** con features opcionales y dinámicas
+- **Formulario de edición de productos** con pre-carga de datos existentes
+- **Recarga automática del catálogo** después de crear, editar o eliminar productos
 - **Modal de confirmación** para acciones destructivas (eliminar productos)
 - **Responsive design** con CSS modular organizado por secciones
 - **Optimistic updates** para mejorar la experiencia de usuario
@@ -89,17 +115,30 @@ hermanosJota_e-commerce/
 ├── client/
 │   ├── src/
 │   │   ├── components/
+│   │   │   ├── AddProductCard.jsx  # Tarjeta para agregar productos (admins)
 │   │   │   ├── FeaturedProduct.jsx # Productos destacados en home
 │   │   │   ├── Footer.jsx          # Footer del sitio
 │   │   │   ├── Header.jsx          # Header con navegación y carrito
 │   │   │   ├── ProductCard.jsx     # Tarjeta de producto en catálogo
 │   │   │   ├── ProductDetail.jsx   # Vista detallada de producto
+│   │   │   ├── ProtectedRoute.jsx  # HOC para rutas protegidas
 │   │   │   └── ProductosPage.jsx   # Página de catálogo
 │   │   ├── pages/
+│   │   │   ├── CartPage.jsx        # Página del carrito de compras
 │   │   │   ├── Catalogo.jsx        # Página del catálogo
 │   │   │   ├── Contacto.jsx        # Formulario de contacto
+│   │   │   ├── FormProductoEdit.jsx # Formulario de edición de productos
 │   │   │   ├── FormProductoNuevo.jsx # Formulario de creación de productos
-│   │   │   └── HomePage.jsx        # Página de inicio
+│   │   │   ├── HomePage.jsx        # Página de inicio
+│   │   │   ├── LoginPage.jsx       # Página de inicio de sesión
+│   │   │   ├── RegisterPage.jsx    # Página de registro
+│   │   │   └── UserProfile.jsx     # Página de perfil de usuario
+│   │   ├── context/
+│   │   │   ├── CartContext.js      # Contexto del carrito
+│   │   │   └── CartProvider.jsx    # Provider del carrito con persistencia por usuario
+│   │   ├── auth/
+│   │   │   ├── AuthContext.js      # Contexto de autenticación
+│   │   │   └── AuthProvider.jsx    # Provider de autenticación con JWT
 │   │   ├── hooks/
 │   │   │   └── useProductos.js     # Hook personalizado (legacy)
 │   │   ├── config/
@@ -222,6 +261,22 @@ npm run dev
 ```
 
 La aplicación se abre en `http://localhost:5173`
+
+## Credenciales de Prueba (Para Profesores/Evaluadores)
+
+Para probar las funcionalidades de **administrador** (crear, editar, eliminar productos), puede utilizar las siguientes credenciales:
+
+```
+Email: admin@gmail.com
+Contraseña: admin
+```
+
+Con esta cuenta tendrá acceso a:
+- ✅ Tarjeta de "Crear Producto" en el catálogo
+- ✅ Botones de "Editar" y "Eliminar" en la vista de detalle de productos
+- ✅ Todas las funcionalidades administrativas del sistema
+
+**Nota:** Para probar como usuario regular, puede registrarse normalmente desde `/registro`.
 
 ## API Endpoints
 
@@ -384,6 +439,52 @@ Authorization: Bearer <token>
 }
 ```
 
+## Funcionalidades de Administrador
+
+El sistema incluye un panel de administración completo para gestionar productos:
+
+### Acceso Administrativo
+
+Los usuarios con rol `admin` tienen acceso a funcionalidades especiales:
+
+1. **Crear Productos**
+   - Tarjeta especial con ícono `+` en el catálogo (solo visible para admins)
+   - Formulario completo con validación
+   - Features opcionales y dinámicas
+   - Ruta: `/nuevo-producto` (protegida)
+
+2. **Editar Productos**
+   - Botón "Editar Producto" en la vista de detalle
+   - Formulario pre-cargado con datos existentes
+   - Actualización con confirmación
+   - Ruta: `/productos/:id/editar` (protegida)
+
+3. **Eliminar Productos**
+   - Botón "Eliminar Producto" en la vista de detalle
+   - Modal de confirmación antes de eliminar
+   - Eliminación de la base de datos
+   - Recarga automática del catálogo
+
+### Carrito Persistente por Usuario
+
+El sistema mantiene un carrito independiente para cada usuario:
+
+- **Usuarios autenticados**: Carrito guardado en localStorage con clave única (`cart_user_{id}`)
+- **Al cerrar sesión**: El carrito se guarda y limpia la vista
+- **Al volver a iniciar sesión**: El carrito se restaura automáticamente
+- **Usuarios diferentes**: Cada usuario ve solo su propio carrito
+
+### Rutas Protegidas
+
+Las siguientes rutas requieren autenticación:
+
+- `/nuevo-producto` - Crear producto (admin)
+- `/productos/:id/editar` - Editar producto (admin)
+- `/perfil` - Perfil de usuario
+- `/carrito` - Carrito de compras (checkout)
+
+Si intentas acceder sin autenticación, serás redirigido a `/iniciar-sesion`.
+
 ## Modelos de Datos
 
 ### User Schema
@@ -532,11 +633,6 @@ npm start        # Alias de preview --host (para red local)
    - Publish directory: `client/dist`
 4. Agregar variable de entorno:
    - `VITE_API_URL`: URL del backend en Render
-
-### Enlaces de producción
-
-- **Frontend**: https://hermanos-jota-muebleria.netlify.app/
-- **Backend**: https://hermanosjota-e-commerce.onrender.com
 
 ## Arquitectura y decisiones clave
 

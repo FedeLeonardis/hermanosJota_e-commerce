@@ -61,7 +61,7 @@ const fetchProducts = async (setProductsState, productsRequestStatus) => {
 };
 
 function AppContent() {
-  const { user, logout, login } = useContext(AuthContext);
+  const { user, logout, login, token } = useContext(AuthContext);
   const { cartCount, addToCart, clearCart } = useContext(CartContext);
 
   const navigate = useNavigate();
@@ -97,6 +97,12 @@ function AppContent() {
   const isLoading =
     productsState.status === "loading" || productsState.status === "idle";
   const fetchError = productsState.error;
+
+  // Función para forzar recarga de productos
+  const refetchProducts = () => {
+    productsRequestStatus.current = "idle";
+    fetchProducts(setProductsState, productsRequestStatus);
+  };
 
   const normalizedSearch = searchQuery.trim().toLowerCase();
   const filteredProducts = normalizedSearch
@@ -191,12 +197,41 @@ function AppContent() {
     if (!productDetail.data)
       return <div className="state-message">Producto no encontrado.</div>;
 
+    const handleDeleteProduct = async (producto) => {
+      if (!token) {
+        alert("Debes iniciar sesión para eliminar productos");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${PRODUCTS_URL}/${producto._id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Error al eliminar el producto");
+        }
+
+        alert(`Producto "${producto.nombre}" eliminado exitosamente`);
+        // Forzar recarga de productos antes de navegar
+        refetchProducts();
+        navigate("/productos");
+      } catch (error) {
+        console.error("Error al eliminar producto:", error);
+        alert("Error al eliminar el producto");
+      }
+    };
+
     return (
       <ProductDetail
         key={productDetail.data._id}
         producto={productDetail.data}
         onBack={handleBackToCatalog}
         onAddToCart={addToCart}
+        onDelete={handleDeleteProduct}
         onEdit={(producto) => navigate(`/productos/${producto._id}/editar`)}
         currentUser={user}
       />

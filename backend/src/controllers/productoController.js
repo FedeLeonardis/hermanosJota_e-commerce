@@ -44,7 +44,7 @@ const editarProducto = async (req, res, next) => {
     const idProducto = req.params.id;
     const datosActualizados = req.body;
     console.log(
-      `Actualizando producto con id: ${idProducto} con datos: ${datosActualizados}`
+      `Actualizando producto con id: ${idProducto}`
     );
     const productoActualizado = await Producto.findByIdAndUpdate(
       idProducto,
@@ -53,13 +53,16 @@ const editarProducto = async (req, res, next) => {
     );
 
     if (!productoActualizado) {
-      const error = new Error("Producto no encontrado para actualziar");
-      erros.status = 404;
+      const error = new Error("Producto no encontrado para actualizar");
+      error.status = 404;
       return next(error);
     }
+
+    // Devolver el producto actualizado
+    res.status(200).json(productoActualizado);
   } catch (error) {
     console.error("Error al actualizar el producto:", error.message);
-    error.status = 404;
+    error.status = 500;
     next(error);
   }
 };

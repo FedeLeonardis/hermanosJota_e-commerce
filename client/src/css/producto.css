@@ -283,7 +283,36 @@ body {
   padding-top: 20px;
   border-top: 1px solid var(--light-gray);
   display: flex;
+  gap: 12px;
   justify-content: flex-end;
+}
+
+/* Botón específico para editar producto */
+.btn-editar-producto {
+  background: var(--sage-green);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 200px;
+}
+
+.btn-editar-producto:hover {
+  background: #76955d;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-editar-producto:active {
+  transform: translateY(0);
 }
 
 /* Botón específico para eliminar producto */

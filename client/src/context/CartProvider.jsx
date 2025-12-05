@@ -1,24 +1,46 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { CartContext } from "./CartContext";
+import { AuthContext } from "../../auth/AuthContext";
 
 export const CartProvider = ({ children }) => {
-  // Inicializamos el carrito leyendo del localStorage si existe
-  // Esto hace que el carrito no se borre si recargas la página 😉
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const savedCart = localStorage.getItem("cart");
-      return savedCart ? JSON.parse(savedCart) : [];
-    } catch (error) {
-      return [];
-    }
-  });
+  const { user } = useContext(AuthContext);
+  
+  // Función para obtener la clave del carrito del usuario
+  const getCartKey = (userId) => {
+    return userId ? `cart_user_${userId}` : "cart_guest";
+  };
 
-  // Cada vez que cambie el carrito, lo guardamos en localStorage
+  // Inicializamos el carrito vacío primero
+  const [cartItems, setCartItems] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Efecto para cargar el carrito cuando el usuario cambia (login/logout/mount)
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
+    const cartKey = getCartKey(user?.id);
+    try {
+      const savedCart = localStorage.getItem(cartKey);
+      if (savedCart) {
+        setCartItems(JSON.parse(savedCart));
+      } else {
+        // Si no hay carrito guardado para este usuario, empezar vacío
+        setCartItems([]);
+      }
+    } catch (error) {
+      console.error("Error al cargar carrito del usuario:", error);
+      setCartItems([]);
+    }
+    setIsLoaded(true);
+  }, [user?.id]);
 
-  // Función para agregar al carrito (Tu lógica original mejorada)
+  // Cada vez que cambie el carrito (después de cargado), guardamos en localStorage
+  useEffect(() => {
+    if (!isLoaded) return; // No guardar hasta que hayamos cargado el carrito inicial
+    
+    const cartKey = getCartKey(user?.id);
+    localStorage.setItem(cartKey, JSON.stringify(cartItems));
+  }, [cartItems, user?.id, isLoaded]);
+
+  // Función para agregar al carrito
   const addToCart = (producto, quantity = 1) => {
     if (!producto) return;
 

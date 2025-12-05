@@ -1,5 +1,6 @@
 const adminGuard = (req, res, next) => {
-  if (req.usuario && req.usuario.rol.includes("admin")) {
+  // Cambiado de req.usuario a req.user para coincidir con authMiddleware
+  if (req.user && req.user.rol && req.user.rol.includes("admin")) {
     next();
   } else {
     res

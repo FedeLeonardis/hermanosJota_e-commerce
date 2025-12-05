@@ -17,14 +17,15 @@ import { CartContext } from "./context/CartContext";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Contacto from "./pages/Contacto.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import Catalogo from "./pages/Catalogo.jsx";
 import FormProductoNuevo from "./pages/FormProductoNuevo.jsx";
+import FormProductoEdit from "./pages/FormProductoEdit.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
-// 1. IMPORTACIÓN AGREGADA
 import CartPage from "./pages/CartPage.jsx";
 
 import { API_CONFIG } from "./config/api.js";
@@ -196,6 +197,7 @@ function AppContent() {
         producto={productDetail.data}
         onBack={handleBackToCatalog}
         onAddToCart={addToCart}
+        onEdit={(producto) => navigate(`/productos/${producto._id}/editar`)}
         currentUser={user}
       />
     );
@@ -259,7 +261,17 @@ function AppContent() {
           />
           <Route path="/productos/:id" element={<ProductDetailWrapper />} />
 
-          {/* 3. RUTA AGREGADA */}
+          {/* Ruta protegida - Editar producto (solo admin) */}
+          <Route
+            path="/productos/:id/editar"
+            element={
+              <ProtectedRoute>
+                <FormProductoEdit onProductUpdated={handleRefreshProducts} />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Ruta del carrito */}
           <Route path="/carrito" element={<CartPage />} />
 
           <Route path="/contacto" element={<Contacto />} />
@@ -291,14 +303,13 @@ function AppContent() {
             }
           />
 
+          {/* Ruta protegida - Perfil de usuario */}
           <Route
             path="/profile"
             element={
-              user ? (
+              <ProtectedRoute>
                 <UserProfile currentUser={user} />
-              ) : (
-                <Navigate to="/iniciar-sesion" />
-              )
+              </ProtectedRoute>
             }
           />
 

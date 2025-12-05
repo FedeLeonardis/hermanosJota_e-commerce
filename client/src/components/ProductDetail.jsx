@@ -11,6 +11,7 @@ const ProductDetail = ({
   onBack = () => {},
   onAddToCart = () => {},
   onDelete = () => {},
+  onEdit = () => {},
   currentUser = null,
 }) => {
   const [cantidad, setCantidad] = useState(1);
@@ -168,6 +169,12 @@ const ProductDetail = ({
           )}
           {currentUser?.roles?.includes("admin") && (
             <div className="admin-actions">
+              <button
+                className="btn-editar-producto"
+                onClick={() => onEdit(producto)}
+              >
+                Editar Producto
+              </button>
               <button
                 className="btn-eliminar-producto"
                 onClick={handleDeleteClick}

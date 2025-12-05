@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
+import { AuthContext } from "../../auth/AuthContext";
 import API_CONFIG from "../config/api";
 // import "../css/perfil.css";
 
 function UserProfile() {
+  const { token } = useContext(AuthContext);
   const [profile, setProfile] = useState(null);
+  const [error, setError] = useState(null);
 
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
+    if (!token) return;
+
     try {
       const response = await fetch(API_CONFIG.ENDPOINTS.PROFILE, {
         method: "GET",
-        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Enviamos el JWT en el header
+        },
       });
 
       if (!response.ok) throw new Error("No se pudo acceder al perfil");
@@ -19,12 +27,21 @@ function UserProfile() {
       setProfile(profileData);
     } catch (error) {
       console.error("Error al obtener perfil:", error);
+      setError(error.message);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchUserProfile();
-  }, []);
+  }, [fetchUserProfile]);
+
+  if (error) {
+    return (
+      <div className="container" style={{ padding: "20px", color: "red" }}>
+        Error: {error}
+      </div>
+    );
+  }
 
   if (!profile)
     return (

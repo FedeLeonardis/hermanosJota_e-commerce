@@ -1,4 +1,5 @@
 import ProductCard from "../components/ProductCard";
+import AddProductCard from "../components/AddProductCard";
 import "../css/reset.css";
 import "../css/productos.css";
 import "../css/variables.css";
@@ -16,6 +17,8 @@ function Catalogo({
   onSelectProduct = () => {},
   searchQuery = "",
   onSearchChange = () => {},
+  currentUser = null,
+  onAddProduct = () => {},
 }) {
   if (isLoading) {
     return <div className="state-message">Cargando...</div>;
@@ -61,6 +64,11 @@ function Catalogo({
           <p className="state-message">
             No encontramos coincidencias para "{trimmedQuery}".
           </p>
+        )}
+
+        {/* Tarjeta especial para agregar producto (solo admins) */}
+        {currentUser?.roles?.includes("admin") && !trimmedQuery && (
+          <AddProductCard onAddProduct={onAddProduct} />
         )}
 
         {productos.map((producto) => (

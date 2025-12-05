@@ -164,6 +164,36 @@
   border-color: var(--color-accent);
 }
 
+/* Estilos para la tarjeta de agregar producto */
+.add-product-card {
+  border: 2px dashed rgba(217, 179, 130, 0.6);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.add-product-card:hover,
+.add-product-card:focus-visible {
+  border-color: var(--color-accent);
+  background: rgba(212, 164, 55, 0.08);
+}
+
+.add-product-icon {
+  width: 100%;
+  max-width: 260px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  color: var(--sage-green);
+  transition: transform 0.24s ease, color 0.24s ease;
+}
+
+.add-product-card:hover .add-product-icon,
+.add-product-card:focus-visible .add-product-icon {
+  transform: scale(1.05);
+  color: var(--color-accent);
+}
+
 @media (max-width: 768px) {
   .catalogo-page {
     width: min(92vw, 700px);

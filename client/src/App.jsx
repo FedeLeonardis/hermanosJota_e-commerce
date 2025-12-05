@@ -291,6 +291,8 @@ function AppContent() {
                 onSelectProduct={showProductDetail}
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
+                currentUser={user}
+                onAddProduct={() => navigate("/nuevo-producto")}
               />
             }
           />
@@ -306,21 +308,20 @@ function AppContent() {
             }
           />
 
+          {/* Ruta protegida - Crear producto (solo admin) */}
+          <Route
+            path="/nuevo-producto"
+            element={
+              <ProtectedRoute>
+                <FormProductoNuevo onProductCreated={handleRefreshProducts} />
+              </ProtectedRoute>
+            }
+          />
+
           {/* Ruta del carrito */}
           <Route path="/carrito" element={<CartPage />} />
 
           <Route path="/contacto" element={<Contacto />} />
-
-          <Route
-            path="/admin/crear-producto"
-            element={
-              user ? (
-                <Navigate to="/" />
-              ) : (
-                <FormProductoNuevo onProductCreated={handleRefreshProducts} />
-              )
-            }
-          />
 
           <Route
             path="/registro"
